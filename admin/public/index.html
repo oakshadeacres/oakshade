@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oakshade Acres Admin</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Oakshade Acres Admin</h1>
+    <p>Manage your chickens and goats</p>
+  </header>
+
+  <main class="container">
+    <!-- Animal Lists -->
+    <div id="dashboard" class="dashboard">
+      <section class="animal-section">
+        <div class="section-header">
+          <h2>Chickens</h2>
+          <button class="btn btn-primary" onclick="showForm('chickens')">+ Add Chicken</button>
+        </div>
+        <div id="chickens-list" class="animal-grid"></div>
+      </section>
+
+      <section class="animal-section">
+        <div class="section-header">
+          <h2>Goats</h2>
+          <button class="btn btn-primary" onclick="showForm('goats')">+ Add Goat</button>
+        </div>
+        <div id="goats-list" class="animal-grid"></div>
+      </section>
+    </div>
+
+    <!-- Create/Edit Form -->
+    <div id="form-container" class="form-container hidden">
+      <div class="form-header">
+        <button class="btn btn-back" onclick="hideForm()">&larr; Back</button>
+        <h2 id="form-title">Add New</h2>
+      </div>
+
+      <form id="animal-form" class="animal-form">
+        <input type="hidden" id="form-type" name="type">
+        <input type="hidden" id="form-id" name="id">
+
+        <div class="form-group">
+          <label for="name">Name *</label>
+          <input type="text" id="name" name="name" required placeholder="e.g., Rhode Island Red">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea id="description" name="description" required rows="4" placeholder="Describe this breed..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="availability">Availability *</label>
+          <select id="availability" name="availability" required>
+            <option value="">Select...</option>
+            <option value="available">Available</option>
+            <option value="limited">Limited</option>
+            <option value="unavailable">Unavailable</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Images</label>
+          <div id="image-upload" class="image-upload" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <input type="file" id="image-input" multiple accept="image/*" onchange="handleFileSelect(event)">
+            <div class="upload-prompt">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17,8 12,3 7,8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <p>Drag & drop images here or click to browse</p>
+            </div>
+          </div>
+          <div id="image-preview" class="image-preview"></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Delete this entry?</h3>
+      <p>This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
