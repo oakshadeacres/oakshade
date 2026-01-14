@@ -1,12 +1,12 @@
 ---
 interface Props {
   name: string;
-  image: string;
+  images: string[];
   description: string;
   availability: 'available' | 'limited' | 'unavailable';
 }
 
-const { name, image, description, availability } = Astro.props;
+const { name, images, description, availability } = Astro.props;
 
 const availabilityStyles = {
   available: 'bg-forest text-cream',
@@ -19,16 +19,60 @@ const availabilityText = {
   limited: 'Limited',
   unavailable: 'Unavailable',
 };
+
+const hasMultipleImages = images.length > 1;
+const carouselId = `carousel-${name.toLowerCase().replace(/\s+/g, '-')}`;
 ---
 
 <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-  <div class="aspect-[4/3] overflow-hidden bg-earth-100">
-    <img
-      src={image}
-      alt={name}
-      class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-      loading="lazy"
-    />
+  <div class="aspect-[4/3] overflow-hidden bg-earth-100 relative">
+    {hasMultipleImages ? (
+      <div class="carousel relative w-full h-full" id={carouselId} data-images={JSON.stringify(images)}>
+        <img
+          src={images[0]}
+          alt={`${name} - Image 1`}
+          class="carousel-image w-full h-full object-cover transition-opacity duration-300"
+          loading="lazy"
+        />
+        <!-- Navigation arrows -->
+        <button
+          type="button"
+          class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-earth-800/60 hover:bg-earth-800/80 text-cream rounded-full flex items-center justify-center transition-colors"
+          aria-label="Previous image"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-earth-800/60 hover:bg-earth-800/80 text-cream rounded-full flex items-center justify-center transition-colors"
+          aria-label="Next image"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        <!-- Dots indicator -->
+        <div class="carousel-dots absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {images.map((_, index) => (
+            <button
+              type="button"
+              class={`w-2 h-2 rounded-full transition-colors ${index === 0 ? 'bg-cream' : 'bg-cream/50'}`}
+              aria-label={`Go to image ${index + 1}`}
+              data-index={index}
+            />
+          ))}
+        </div>
+      </div>
+    ) : (
+      <img
+        src={images[0]}
+        alt={name}
+        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    )}
   </div>
   <div class="p-5">
     <div class="flex items-start justify-between gap-2 mb-2">
@@ -40,3 +84,46 @@ const availabilityText = {
     <p class="text-earth-600 text-sm leading-relaxed">{description}</p>
   </div>
 </article>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel').forEach((carousel) => {
+      const images = JSON.parse(carousel.dataset.images || '[]');
+      if (images.length <= 1) return;
+
+      const img = carousel.querySelector('.carousel-image') as HTMLImageElement;
+      const dots = carousel.querySelectorAll('.carousel-dots button');
+      const prevBtn = carousel.querySelector('.carousel-prev');
+      const nextBtn = carousel.querySelector('.carousel-next');
+      let currentIndex = 0;
+
+      const updateImage = (index: number) => {
+        currentIndex = (index + images.length) % images.length;
+        img.src = images[currentIndex];
+        img.alt = img.alt.replace(/Image \d+/, `Image ${currentIndex + 1}`);
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('bg-cream', i === currentIndex);
+          dot.classList.toggle('bg-cream/50', i !== currentIndex);
+        });
+      };
+
+      prevBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateImage(currentIndex - 1);
+      });
+
+      nextBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateImage(currentIndex + 1);
+      });
+
+      dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const index = parseInt((dot as HTMLElement).dataset.index || '0');
+          updateImage(index);
+        });
+      });
+    });
+  });
+</script>

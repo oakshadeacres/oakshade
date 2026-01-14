@@ -1,6 +1,9 @@
 ---
 name: "Rhode Island Red"
-image: "/images/chickens/rhode-island-red.jpg"
+images:
+  - "/images/chickens/rhode-island-red-1.jpg"
+  - "/images/chickens/rhode-island-red-2.jpg"
+  - "/images/chickens/rhode-island-red-3.jpg"
 description: "A hardy dual-purpose breed known for excellent egg production. These birds are friendly, easy to care for, and lay beautiful brown eggs year-round."
 availability: "available"
 ---

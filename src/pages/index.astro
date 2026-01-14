@@ -69,7 +69,7 @@ const featuredGoats = goats.slice(0, 2);
           {featuredChickens.map((chicken) => (
             <AnimalCard
               name={chicken.data.name}
-              image={chicken.data.image}
+              images={chicken.data.images}
               description={chicken.data.description}
               availability={chicken.data.availability}
             />
@@ -93,7 +93,7 @@ const featuredGoats = goats.slice(0, 2);
           {featuredGoats.map((goat) => (
             <AnimalCard
               name={goat.data.name}
-              image={goat.data.image}
+              images={goat.data.images}
               description={goat.data.description}
               availability={goat.data.availability}
             />

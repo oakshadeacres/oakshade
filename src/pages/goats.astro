@@ -25,7 +25,7 @@ const goats = await getCollection('goats');
           {goats.map((goat) => (
             <AnimalCard
               name={goat.data.name}
-              image={goat.data.image}
+              images={goat.data.images}
               description={goat.data.description}
               availability={goat.data.availability}
             />
