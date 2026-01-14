@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AnimalCard from '../components/AnimalCard.astro';
+import { getCollection } from 'astro:content';
+
+const chickens = await getCollection('chickens');
+---
+
+<Layout title="Our Chickens" description="Explore our collection of quality chicken breeds at Oakshade Acres">
+  <!-- Page Header -->
+  <section class="bg-earth-700 text-cream py-12">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="font-serif text-4xl sm:text-5xl mb-4">Our Chickens</h1>
+      <p class="text-earth-200 text-lg max-w-2xl mx-auto">
+        Browse our selection of chicken breeds. Each one is raised with care and attention.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chicken Gallery -->
+  <section class="py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      {chickens.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {chickens.map((chicken) => (
+            <AnimalCard
+              name={chicken.data.name}
+              image={chicken.data.image}
+              description={chicken.data.description}
+              availability={chicken.data.availability}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-earth-500 text-lg">
+            No chickens listed yet. Check back soon!
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-12 bg-earth-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="font-serif text-2xl text-earth-800 mb-4">Interested in Our Chickens?</h2>
+      <p class="text-earth-600 mb-6">
+        Contact us to enquire about availability and pricing.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block px-6 py-3 bg-forest text-cream rounded-lg hover:bg-forest-light transition-colors font-medium"
+      >
+        Get in Touch
+      </a>
+    </div>
+  </section>
+</Layout>

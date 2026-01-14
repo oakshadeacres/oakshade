@@ -1,0 +1,42 @@
+---
+interface Props {
+  name: string;
+  image: string;
+  description: string;
+  availability: 'available' | 'limited' | 'unavailable';
+}
+
+const { name, image, description, availability } = Astro.props;
+
+const availabilityStyles = {
+  available: 'bg-forest text-cream',
+  limited: 'bg-earth-400 text-cream',
+  unavailable: 'bg-earth-300 text-earth-700',
+};
+
+const availabilityText = {
+  available: 'Available',
+  limited: 'Limited',
+  unavailable: 'Unavailable',
+};
+---
+
+<article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+  <div class="aspect-[4/3] overflow-hidden bg-earth-100">
+    <img
+      src={image}
+      alt={name}
+      class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+      loading="lazy"
+    />
+  </div>
+  <div class="p-5">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <h3 class="font-serif text-xl text-earth-800">{name}</h3>
+      <span class={`px-2 py-1 rounded-full text-xs font-medium ${availabilityStyles[availability]}`}>
+        {availabilityText[availability]}
+      </span>
+    </div>
+    <p class="text-earth-600 text-sm leading-relaxed">{description}</p>
+  </div>
+</article>

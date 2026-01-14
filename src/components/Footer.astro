@@ -1,0 +1,40 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-earth-800 text-earth-200 mt-auto">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="font-serif text-xl text-cream mb-3">Oakshade Acres</h3>
+        <p class="text-earth-300 text-sm leading-relaxed">
+          Quality chickens and goats raised with care in a natural environment.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl text-cream mb-3">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/" class="hover:text-cream transition-colors">Home</a></li>
+          <li><a href="/chickens" class="hover:text-cream transition-colors">Our Chickens</a></li>
+          <li><a href="/goats" class="hover:text-cream transition-colors">Our Goats</a></li>
+          <li><a href="/contact" class="hover:text-cream transition-colors">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl text-cream mb-3">Get in Touch</h3>
+        <p class="text-earth-300 text-sm leading-relaxed">
+          Interested in our animals? We'd love to hear from you!
+        </p>
+        <a
+          href="/contact"
+          class="inline-block mt-3 px-4 py-2 bg-forest text-cream rounded-lg hover:bg-forest-light transition-colors text-sm"
+        >
+          Contact Us
+        </a>
+      </div>
+    </div>
+    <div class="border-t border-earth-700 mt-8 pt-6 text-center text-earth-400 text-sm">
+      <p>&copy; {currentYear} Oakshade Acres. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

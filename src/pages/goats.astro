@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AnimalCard from '../components/AnimalCard.astro';
+import { getCollection } from 'astro:content';
+
+const goats = await getCollection('goats');
+---
+
+<Layout title="Our Goats" description="Explore our collection of quality goat breeds at Oakshade Acres">
+  <!-- Page Header -->
+  <section class="bg-earth-700 text-cream py-12">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="font-serif text-4xl sm:text-5xl mb-4">Our Goats</h1>
+      <p class="text-earth-200 text-lg max-w-2xl mx-auto">
+        Meet our friendly goats. Each one has their own personality and charm.
+      </p>
+    </div>
+  </section>
+
+  <!-- Goat Gallery -->
+  <section class="py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      {goats.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {goats.map((goat) => (
+            <AnimalCard
+              name={goat.data.name}
+              image={goat.data.image}
+              description={goat.data.description}
+              availability={goat.data.availability}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-earth-500 text-lg">
+            No goats listed yet. Check back soon!
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-12 bg-earth-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="font-serif text-2xl text-earth-800 mb-4">Interested in Our Goats?</h2>
+      <p class="text-earth-600 mb-6">
+        Contact us to enquire about availability and pricing.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block px-6 py-3 bg-forest text-cream rounded-lg hover:bg-forest-light transition-colors font-medium"
+      >
+        Get in Touch
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AnimalCard from '../components/AnimalCard.astro';
+import { getCollection } from 'astro:content';
+
+const chickens = await getCollection('chickens');
+const goats = await getCollection('goats');
+
+// Get first 2 of each for featured section
+const featuredChickens = chickens.slice(0, 2);
+const featuredGoats = goats.slice(0, 2);
+---
+
+<Layout title="Home" description="Welcome to Oakshade Acres - Quality chickens and goats raised with care">
+  <!-- Hero Section -->
+  <section class="bg-earth-700 text-cream py-16 sm:py-24">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl mb-6">
+        Welcome to Oakshade Acres
+      </h1>
+      <p class="text-earth-200 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
+        Quality chickens and goats raised with care in a natural, sustainable environment.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="/chickens"
+          class="px-6 py-3 bg-forest text-cream rounded-lg hover:bg-forest-light transition-colors font-medium"
+        >
+          View Our Chickens
+        </a>
+        <a
+          href="/goats"
+          class="px-6 py-3 bg-barn-red text-cream rounded-lg hover:bg-barn-light transition-colors font-medium"
+        >
+          View Our Goats
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16 bg-earth-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="font-serif text-3xl text-earth-800 mb-6">About Our Farm</h2>
+        <p class="text-earth-600 leading-relaxed mb-4">
+          At Oakshade Acres, we take pride in raising healthy, happy animals. Our chickens and goats
+          are raised in a natural environment with plenty of space to roam and forage.
+        </p>
+        <p class="text-earth-600 leading-relaxed">
+          Whether you're looking for laying hens, heritage breed chickens, or friendly goats,
+          we're here to help you find the perfect addition to your farm or homestead.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Chickens -->
+  {featuredChickens.length > 0 && (
+    <section class="py-16">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="font-serif text-3xl text-earth-800">Our Chickens</h2>
+          <a href="/chickens" class="text-forest hover:text-forest-light transition-colors font-medium">
+            View All &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          {featuredChickens.map((chicken) => (
+            <AnimalCard
+              name={chicken.data.name}
+              image={chicken.data.image}
+              description={chicken.data.description}
+              availability={chicken.data.availability}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Featured Goats -->
+  {featuredGoats.length > 0 && (
+    <section class="py-16 bg-earth-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="font-serif text-3xl text-earth-800">Our Goats</h2>
+          <a href="/goats" class="text-forest hover:text-forest-light transition-colors font-medium">
+            View All &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          {featuredGoats.map((goat) => (
+            <AnimalCard
+              name={goat.data.name}
+              image={goat.data.image}
+              description={goat.data.description}
+              availability={goat.data.availability}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-forest text-cream">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="font-serif text-3xl mb-4">Interested in Our Animals?</h2>
+      <p class="text-forest-light text-lg mb-8 max-w-2xl mx-auto" style="color: #a8d5ba;">
+        We'd love to hear from you! Get in touch to learn more about availability and pricing.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block px-8 py-4 bg-cream text-forest rounded-lg hover:bg-earth-100 transition-colors font-medium text-lg"
+      >
+        Contact Us
+      </a>
+    </div>
+  </section>
+</Layout>
