@@ -327,6 +327,35 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Deploy
+async function deployChanges() {
+  const btn = document.getElementById('deploy-btn');
+  const originalText = btn.innerHTML;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>Deploying...</span>';
+
+  try {
+    const res = await fetch('/api/deploy', { method: 'POST' });
+    const data = await res.json();
+
+    if (res.ok) {
+      btn.innerHTML = '<span>Deployed!</span>';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 2000);
+    } else {
+      throw new Error(data.error || 'Deploy failed');
+    }
+  } catch (err) {
+    console.error('Deploy failed:', err);
+    alert('Deploy failed: ' + err.message);
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
 // Utilities
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);

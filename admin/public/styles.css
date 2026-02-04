@@ -386,6 +386,32 @@ body {
 }
 
 /* Header layout */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-deploy {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--forest);
+  color: var(--cream);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.btn-deploy:hover {
+  background-color: var(--forest-light);
+}
+
+.btn-deploy:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .header-inner {
   display: flex;
   justify-content: space-between;

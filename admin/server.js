@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const { createClient } = require('redis');
+const { exec } = require('child_process');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -307,6 +308,30 @@ app.delete('/api/images', (req, res) => {
   }
 
   res.json({ success: true });
+});
+
+// Deploy API - commit and push to trigger GitHub Actions
+
+app.post('/api/deploy', (req, res) => {
+  const timestamp = new Date().toISOString();
+  const commitMsg = `Content update ${timestamp}`;
+
+  exec(
+    `git add -A && git commit -m "${commitMsg}" && git push`,
+    { cwd: PROJECT_ROOT },
+    (err, stdout, stderr) => {
+      if (err) {
+        // Check if it's just "nothing to commit"
+        if (stderr.includes('nothing to commit') || stdout.includes('nothing to commit')) {
+          return res.json({ success: true, message: 'No changes to deploy' });
+        }
+        console.error('Deploy failed:', stderr);
+        return res.status(500).json({ error: 'Deploy failed', details: stderr });
+      }
+      console.log('Deploy successful:', stdout);
+      res.json({ success: true, message: 'Deployed successfully' });
+    }
+  );
 });
 
 // Followup Queue API
