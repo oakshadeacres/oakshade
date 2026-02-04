@@ -26,4 +26,21 @@ sudo apt install redis-server
 
 ## Deployment
 
-The main site deploys to Netlify. The admin app runs locally on a Raspberry Pi — see `CLAUDE.md` for systemd setup instructions.
+The main site deploys to GitHub Pages via GitHub Actions. The admin app runs locally on a Raspberry Pi.
+
+### First-time GitHub Pages setup
+
+1. Go to the repo on GitHub
+2. Settings → Pages
+3. Under "Build and deployment", set Source to **GitHub Actions**
+4. The workflow will run automatically on the next push
+
+Site URL: `https://oakshadeacres.github.io/oakshade`
+
+### Deploying content changes
+
+Use the **Deploy** button in the admin app header. This commits and pushes changes to `main`, which triggers the GitHub Actions workflow to rebuild and deploy the site.
+
+### Pi setup
+
+See `CLAUDE.md` for systemd setup instructions for the admin app.
