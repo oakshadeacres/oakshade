@@ -13,8 +13,18 @@ const formId = document.getElementById('form-id');
 const imagePreview = document.getElementById('image-preview');
 const deleteModal = document.getElementById('delete-modal');
 
+// Followup elements
+const followupBtn = document.getElementById('followup-btn');
+const followupCountEl = document.getElementById('followup-count');
+const followupModal = document.getElementById('followup-modal');
+const followupList = document.getElementById('followup-list');
+
 // Initialize
-document.addEventListener('DOMContentLoaded', loadAnimals);
+document.addEventListener('DOMContentLoaded', () => {
+  loadAnimals();
+  pollFollowups();
+  setInterval(pollFollowups, 30000);
+});
 animalForm.addEventListener('submit', handleSubmit);
 
 // Load and display animals
@@ -239,6 +249,82 @@ async function confirmDelete() {
     console.error('Failed to delete:', err);
     alert('Failed to delete animal');
   }
+}
+
+// Followup queue
+async function pollFollowups() {
+  try {
+    const res = await fetch('/api/followups/count');
+    const { count } = await res.json();
+
+    if (count > 0) {
+      followupCountEl.textContent = count;
+      followupBtn.classList.remove('hidden');
+    } else {
+      followupBtn.classList.add('hidden');
+    }
+  } catch (err) {
+    // Silently ignore — Redis may not be running
+  }
+}
+
+async function toggleFollowupPanel() {
+  followupModal.classList.toggle('hidden');
+  if (!followupModal.classList.contains('hidden')) {
+    await loadFollowups();
+  }
+}
+
+function closeFollowupPanel() {
+  followupModal.classList.add('hidden');
+}
+
+async function loadFollowups() {
+  try {
+    const res = await fetch('/api/followups');
+    const followups = await res.json();
+
+    if (followups.length === 0) {
+      followupList.innerHTML = '<div class="empty-state">No unanswered questions</div>';
+      return;
+    }
+
+    followupList.innerHTML = followups.map(f => `
+      <div class="followup-item">
+        <div class="followup-item-header">
+          <span class="followup-sender">Sender: ${f.sender_id}</span>
+          <span class="followup-time">${formatTimestamp(f.timestamp)}</span>
+        </div>
+        <div class="followup-question">${escapeHtml(f.question)}</div>
+        <div class="followup-response">"${escapeHtml(f.bot_response)}"</div>
+        <button class="btn btn-secondary" onclick="dismissFollowup(${f.index})">Dismiss</button>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Failed to load followups:', err);
+    followupList.innerHTML = '<div class="empty-state">Failed to load followups</div>';
+  }
+}
+
+async function dismissFollowup(index) {
+  try {
+    await fetch(`/api/followups/${index}`, { method: 'DELETE' });
+    await loadFollowups();
+    await pollFollowups();
+  } catch (err) {
+    console.error('Failed to dismiss followup:', err);
+  }
+}
+
+function formatTimestamp(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleString();
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 // Utilities

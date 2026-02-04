@@ -3,48 +3,114 @@ const multer = require('multer');
 const matter = require('gray-matter');
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
+const { createClient } = require('redis');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+const HOST = process.env.HOST || '0.0.0.0';
+
+// Authentication credentials (set via environment variables in production)
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'oakshade123';
 
 // Paths relative to the main project
 const PROJECT_ROOT = path.join(__dirname, '..');
 const CONTENT_DIR = path.join(PROJECT_ROOT, 'src', 'content');
 const IMAGES_DIR = path.join(PROJECT_ROOT, 'public', 'images');
 
+// Redis for followup queue (shared with chick-bot)
+const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+const FOLLOWUP_QUEUE = 'followup_queue';
+const redisClient = createClient({ url: REDIS_URL });
+redisClient.on('error', err => console.error('Redis error:', err));
+redisClient.connect().then(() => {
+  console.log('  Connected to Redis at', REDIS_URL);
+}).catch(err => {
+  console.error('Failed to connect to Redis:', err.message);
+});
+
 // Middleware
 app.use(express.json());
+
+// Basic authentication
+app.use((req, res, next) => {
+  // Skip auth for local development if desired
+  if (HOST === '127.0.0.1' && !process.env.REQUIRE_AUTH) {
+    return next();
+  }
+
+  const auth = req.headers.authorization;
+  const expected = 'Basic ' + Buffer.from(`${ADMIN_USER}:${ADMIN_PASS}`).toString('base64');
+
+  if (!auth || auth !== expected) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="Oakshade Admin"');
+    return res.status(401).send('Authentication required');
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve images from main project for preview
 app.use('/images', express.static(IMAGES_DIR));
 
-// Configure multer for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const type = req.params.type || req.body.type || 'chickens';
-    const dir = path.join(IMAGES_DIR, type);
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    // Sanitize filename
-    const safeName = file.originalname
-      .toLowerCase()
-      .replace(/[^a-z0-9.]/g, '-')
-      .replace(/-+/g, '-');
-    cb(null, `${Date.now()}-${safeName}`);
-  }
-});
-
+// Configure multer for image uploads (memory storage for processing)
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
     const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     cb(null, allowed.includes(file.mimetype));
   },
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB
 });
+
+// Image processing settings
+const IMAGE_CONFIG = {
+  full: { maxWidth: 1200, quality: 80 },
+  thumb: { maxWidth: 400, quality: 75 }
+};
+
+// Process and save image
+async function processImage(buffer, originalName, type) {
+  const dir = path.join(IMAGES_DIR, type);
+  fs.mkdirSync(dir, { recursive: true });
+
+  // Generate safe base name
+  const baseName = originalName
+    .toLowerCase()
+    .replace(/\.[^.]+$/, '') // Remove extension
+    .replace(/[^a-z0-9]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  const timestamp = Date.now();
+  const fullName = `${timestamp}-${baseName}.webp`;
+  const thumbName = `${timestamp}-${baseName}-thumb.webp`;
+
+  // Process full-size image
+  await sharp(buffer)
+    .resize(IMAGE_CONFIG.full.maxWidth, null, {
+      withoutEnlargement: true,
+      fit: 'inside'
+    })
+    .webp({ quality: IMAGE_CONFIG.full.quality })
+    .toFile(path.join(dir, fullName));
+
+  // Process thumbnail
+  await sharp(buffer)
+    .resize(IMAGE_CONFIG.thumb.maxWidth, null, {
+      withoutEnlargement: true,
+      fit: 'inside'
+    })
+    .webp({ quality: IMAGE_CONFIG.thumb.quality })
+    .toFile(path.join(dir, thumbName));
+
+  return {
+    full: `/images/${type}/${fullName}`,
+    thumb: `/images/${type}/${thumbName}`
+  };
+}
 
 // Helper: Read all animals of a type
 function getAnimals(type) {
@@ -186,18 +252,30 @@ app.delete('/api/animals/:type/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// POST /api/upload/:type - Upload images
-app.post('/api/upload/:type', upload.array('images', 10), (req, res) => {
+// POST /api/upload/:type - Upload and process images
+app.post('/api/upload/:type', upload.array('images', 10), async (req, res) => {
   const { type } = req.params;
   if (!['chickens', 'goats'].includes(type)) {
     return res.status(400).json({ error: 'Invalid type' });
   }
 
-  const urls = req.files.map(f => `/images/${type}/${f.filename}`);
-  res.json({ urls });
+  try {
+    const results = await Promise.all(
+      req.files.map(f => processImage(f.buffer, f.originalname, type))
+    );
+
+    // Return both full URLs (for content) and thumb URLs (for previews)
+    res.json({
+      images: results,
+      urls: results.map(r => r.full) // Backwards compatible
+    });
+  } catch (err) {
+    console.error('Image processing error:', err);
+    res.status(500).json({ error: 'Failed to process images' });
+  }
 });
 
-// DELETE /api/images - Delete an image
+// DELETE /api/images - Delete an image (and its thumbnail)
 app.delete('/api/images', (req, res) => {
   const { path: imagePath } = req.body;
   if (!imagePath || !imagePath.startsWith('/images/')) {
@@ -209,11 +287,83 @@ app.delete('/api/images', (req, res) => {
     return res.status(404).json({ error: 'Image not found' });
   }
 
+  // Delete main image
   fs.unlinkSync(filepath);
+
+  // Also delete thumbnail if it exists
+  const thumbPath = imagePath.replace('.webp', '-thumb.webp');
+  const thumbFilepath = path.join(PROJECT_ROOT, 'public', thumbPath);
+  if (fs.existsSync(thumbFilepath)) {
+    fs.unlinkSync(thumbFilepath);
+  }
+
+  // If deleting a thumb, also try to delete the full version
+  if (imagePath.includes('-thumb.webp')) {
+    const fullPath = imagePath.replace('-thumb.webp', '.webp');
+    const fullFilepath = path.join(PROJECT_ROOT, 'public', fullPath);
+    if (fs.existsSync(fullFilepath)) {
+      fs.unlinkSync(fullFilepath);
+    }
+  }
+
   res.json({ success: true });
 });
 
+// Followup Queue API
+
+// GET /api/followups - List all followups
+app.get('/api/followups', async (req, res) => {
+  try {
+    const items = await redisClient.lRange(FOLLOWUP_QUEUE, 0, -1);
+    const followups = items.map((item, index) => ({ index, ...JSON.parse(item) }));
+    res.json(followups);
+  } catch (err) {
+    console.error('Failed to get followups:', err);
+    res.status(500).json({ error: 'Failed to get followups' });
+  }
+});
+
+// GET /api/followups/count - Get count of pending followups
+app.get('/api/followups/count', async (req, res) => {
+  try {
+    const count = await redisClient.lLen(FOLLOWUP_QUEUE);
+    res.json({ count });
+  } catch (err) {
+    console.error('Failed to get followup count:', err);
+    res.status(500).json({ error: 'Failed to get followup count' });
+  }
+});
+
+// DELETE /api/followups/:index - Remove a followup by index
+app.delete('/api/followups/:index', async (req, res) => {
+  try {
+    const index = parseInt(req.params.index, 10);
+    const items = await redisClient.lRange(FOLLOWUP_QUEUE, 0, -1);
+    if (index < 0 || index >= items.length) {
+      return res.status(404).json({ error: 'Followup not found' });
+    }
+    // Mark the item with a sentinel value, then remove it
+    const sentinel = '__REMOVED__';
+    await redisClient.lSet(FOLLOWUP_QUEUE, index, sentinel);
+    await redisClient.lRem(FOLLOWUP_QUEUE, 1, sentinel);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Failed to delete followup:', err);
+    res.status(500).json({ error: 'Failed to delete followup' });
+  }
+});
+
 // Start server
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`\n  Oakshade Admin running at http://localhost:${PORT}\n`);
+app.listen(PORT, HOST, () => {
+  const localUrl = `http://localhost:${PORT}`;
+  const networkUrl = HOST === '0.0.0.0' ? `http://<your-ip>:${PORT}` : `http://${HOST}:${PORT}`;
+
+  console.log(`
+  Oakshade Admin running at:
+    Local:   ${localUrl}
+    Network: ${networkUrl}
+
+  Authentication: ${HOST === '127.0.0.1' && !process.env.REQUIRE_AUTH ? 'disabled (localhost)' : 'enabled'}
+  Username: ${ADMIN_USER}
+  `);
 });
