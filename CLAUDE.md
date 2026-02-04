@@ -36,6 +36,16 @@ REST API for CRUD operations on content files:
 
 Images upload to `/public/images/{type}/`.
 
+### Raspberry Pi Deployment
+
+The admin app includes a systemd service file (`admin/oakshade-admin.service`). See `chick-bot/CLAUDE.md` for full deployment instructions including systemd setup and Cloudflare Tunnel migration (replacing ngrok for a stable webhook URL).
+
+If using nvm on the Pi, create a stable symlink for systemd:
+
+```bash
+sudo ln -s "$(which node)" /usr/local/bin/node
+```
+
 ### Key Configuration
 - **Path alias**: `@/*` maps to `src/*` (tsconfig.json)
 - **Tailwind theme**: Custom rustic palette in `tailwind.config.mjs` (cream, barn-red, forest, earth)
