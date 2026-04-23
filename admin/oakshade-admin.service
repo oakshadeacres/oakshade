@@ -7,6 +7,7 @@ Wants=redis-server.service
 Type=simple
 User=john
 WorkingDirectory=/home/john/oakshade/admin
+EnvironmentFile=-/home/john/oakshade/admin/.env
 ExecStart=/usr/local/bin/node server.js
 Restart=on-failure
 RestartSec=5

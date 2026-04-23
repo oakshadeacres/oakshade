@@ -1,0 +1,27 @@
+---
+interface Props {
+  logoImage: string;
+  title: string;
+  tagline: string;
+  badges: { label: string; sage?: boolean }[];
+  ctas: { label: string; href: string; primary?: boolean }[];
+}
+const { logoImage, title, tagline, badges, ctas } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const logoSrc = logoImage.startsWith('http') ? logoImage : `${base}${logoImage}`;
+---
+<section class="hero">
+  <img class="hero-logo reveal-scale" src={logoSrc} alt="Oakshade Acres" />
+  <h1 class="reveal" style="transition-delay: 0.1s">{title}</h1>
+  <p class="hero-tagline reveal" style="transition-delay: 0.2s">{tagline}</p>
+  <div class="hero-badges stagger" style="transition-delay: 0.3s">
+    {badges.map((b) => (
+      <span class={`badge${b.sage ? ' sage' : ''}`}>{b.label}</span>
+    ))}
+  </div>
+  <div class="hero-btns reveal" style="transition-delay: 0.4s">
+    {ctas.map((c) => (
+      <a class={c.primary ? 'btn-primary' : 'btn-secondary'} href={c.href}>{c.label}</a>
+    ))}
+  </div>
+</section>

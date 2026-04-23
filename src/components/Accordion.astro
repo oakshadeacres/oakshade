@@ -1,0 +1,42 @@
+---
+interface Item { q: string; a: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<div class="accordion" data-accordion>
+  {items.map((item, i) => (
+    <div class="acc-item">
+      <button class="acc-trigger" type="button" data-acc-trigger={i}>
+        <h4>{item.q}</h4>
+        <svg class="acc-icon" data-acc-icon={i} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <div class="acc-body" data-acc-body={i}>
+        <p set:html={item.a}></p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll('[data-accordion]').forEach((acc) => {
+    acc.querySelectorAll<HTMLButtonElement>('[data-acc-trigger]').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const idx = trigger.getAttribute('data-acc-trigger');
+        const body = acc.querySelector(`[data-acc-body="${idx}"]`);
+        const icon = acc.querySelector(`[data-acc-icon="${idx}"]`);
+        const isOpen = body?.classList.contains('open');
+
+        acc.querySelectorAll('[data-acc-body]').forEach((b) => b.classList.remove('open'));
+        acc.querySelectorAll('[data-acc-icon]').forEach((i) => i.classList.remove('open'));
+
+        if (!isOpen) {
+          body?.classList.add('open');
+          icon?.classList.add('open');
+        }
+      });
+    });
+  });
+</script>

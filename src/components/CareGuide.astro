@@ -1,0 +1,23 @@
+---
+import Accordion from './Accordion.astro';
+
+interface Item { q: string; a: string }
+interface Props {
+  label: string;
+  title: string;
+  sub: string;
+  items: Item[];
+}
+const { label, title, sub, items } = Astro.props;
+---
+<section id="care" class="section-full breeds-bg">
+  <div class="section-inner">
+    <p class="section-label reveal">{label}</p>
+    <h2 class="section-title reveal">{title}</h2>
+    <div class="divider reveal"></div>
+    <p class="section-sub reveal">{sub}</p>
+    <div class="reveal">
+      <Accordion items={items} />
+    </div>
+  </div>
+</section>

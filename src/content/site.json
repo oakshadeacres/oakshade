@@ -1,0 +1,297 @@
+{
+  "nav": {
+    "logo": "Oakshade Acres",
+    "links": [
+      {
+        "label": "Our Breeds",
+        "href": "#breeds"
+      },
+      {
+        "label": "Availability",
+        "href": "#schedule"
+      },
+      {
+        "label": "Order",
+        "href": "#order"
+      },
+      {
+        "label": "About",
+        "href": "#about"
+      },
+      {
+        "label": "FAQ",
+        "href": "#faq"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact-form"
+      }
+    ],
+    "cta": {
+      "label": "Preorder Now",
+      "href": "#order"
+    }
+  },
+  "hero": {
+    "logoImage": "/images/site/logo.jpg",
+    "title": "Quality Chicks & Hatching Eggs",
+    "tagline": "Specialty Orpingtons and more, raised with care in Dayton, Texas. Small flock, big heart.",
+    "badges": [
+      {
+        "label": "English Orpington Specialists",
+        "sage": false
+      },
+      {
+        "label": "Polish",
+        "sage": true
+      },
+      {
+        "label": "Bantam Cochins",
+        "sage": false
+      },
+      {
+        "label": "Bantam Easter Eggers",
+        "sage": true
+      }
+    ],
+    "ctas": [
+      {
+        "label": "See What's Hatching",
+        "href": "#schedule",
+        "primary": true
+      },
+      {
+        "label": "How to Preorder",
+        "href": "#order",
+        "primary": false
+      }
+    ]
+  },
+  "about": {
+    "label": "Our Story",
+    "title": "A Family Flock in Dayton, Texas",
+    "paragraphs": [
+      "Oakshade Acres started the way most backyard flocks do — with a handful of chicks and a whole lot of curiosity. What began as a hobby quickly turned into a passion for raising quality birds with exceptional temperaments and stunning colors.",
+      "We specialize in English Orpingtons, offering a wide range of colors from the classic Buff to rare Lavender and Chocolate varieties. We also keep Polish, Bantam Cochins, and Bantam Easter Eggers for those who love variety in their flocks.",
+      "Every bird here is raised with care, handled from hatch day, and loved before they ever reach your farm. We're a small operation — and we think that makes all the difference."
+    ],
+    "image": ""
+  },
+  "breedsSection": {
+    "label": "Meet the Flock",
+    "title": "Our Breeds"
+  },
+  "schedule": {
+    "label": "What's Available",
+    "title": "Hatch Schedule & Availability",
+    "sub": "Our hatch schedule is updated regularly. Reach out on Facebook to claim your spot — popular breeds go fast!",
+    "springLabel": "🌱 Spring 2026",
+    "fallLabel": "🍂 Fall 2026",
+    "footerNote": "✉️ Reach out on Facebook or use the contact form to reserve your spot — popular varieties go fast!"
+  },
+  "order": {
+    "label": "How It Works",
+    "title": "How to Preorder",
+    "intro": "Ordering is simple — we handle everything through Facebook Messenger so you always reach us directly.",
+    "steps": [
+      {
+        "title": "Find Us on Facebook",
+        "text": "Search for Oakshade Acres on Facebook or follow the link below to find our page and see the latest availability."
+      },
+      {
+        "title": "Send Us a Message",
+        "text": "Message us with the breed, quantity, and type (chicks or hatching eggs) you're interested in."
+      },
+      {
+        "title": "Reserve Your Spot",
+        "text": "We'll confirm availability and let you know about deposit requirements to hold your order."
+      },
+      {
+        "title": "Pickup in Dayton, TX",
+        "text": "When your chicks are ready, we'll schedule a pickup time at our farm. Hatching eggs can ship USPS."
+      }
+    ],
+    "facebookUrl": "https://www.facebook.com/people/Oakshade-Orpington-Acres/61576026751769/",
+    "ctaLabel": "Message Us on Facebook",
+    "ctaNote": "You can also call or email — see contact info below."
+  },
+  "contact": {
+    "label": "Get in Touch",
+    "title": "Send Us a Message",
+    "intro": "Don't have Facebook? No problem — fill out the form and we'll get back to you as soon as we can. We typically respond within 1–2 days.",
+    "infoRows": [
+      {
+        "icon": "📍",
+        "text": "Dayton, Texas (Liberty County)"
+      },
+      {
+        "icon": "📞",
+        "text": "(936) 367-1974"
+      },
+      {
+        "icon": "📧",
+        "text": "oakshadeacreschks@gmail.com"
+      },
+      {
+        "icon": "📦",
+        "text": "Hatching eggs ship via USPS Priority"
+      }
+    ],
+    "email": "oakshadeacreschks@gmail.com",
+    "endpoint": ""
+  },
+  "pickupShippingSection": {
+    "label": "Logistics",
+    "title": "Pickup & Shipping"
+  },
+  "pickupShipping": [
+    {
+      "icon": "📍",
+      "title": "Local Pickup",
+      "text": "We are located in Dayton, Texas (Liberty County). Pickup is by appointment. We'll coordinate a time when you reach out to order."
+    },
+    {
+      "icon": "📦",
+      "title": "Hatching Egg Shipping",
+      "text": "We ship hatching eggs via USPS Priority Mail 2-Day. Eggs are carefully wrapped and packed. Hatch rates can vary with shipping; we do our best to pack securely."
+    },
+    {
+      "icon": "🐣",
+      "title": "Chick Shipping",
+      "text": "Day-old chick shipping is not currently available. Chicks must be picked up locally in Dayton, TX."
+    },
+    {
+      "icon": "💰",
+      "title": "Payment",
+      "text": "We accept cash, Venmo, and PayPal. A deposit may be required to hold chicks from a scheduled hatch."
+    }
+  ],
+  "careGuideSection": {
+    "label": "New to Chicks?",
+    "title": "Chick Care Guide",
+    "sub": "Everything you need to know to give your new chicks a great start."
+  },
+  "careGuide": [
+    {
+      "q": "What do I need before my chicks arrive?",
+      "a": "You'll want: a brooder (plastic tote, cardboard box, or brooder pan); a heat lamp or heating plate — chicks need 90–95°F the first week, decreasing 5°F each week; chick starter feed (medicated or non-medicated); a chick waterer — refresh daily; pine shavings or paper towels as bedding."
+    },
+    {
+      "q": "How long do chicks need a heat lamp?",
+      "a": "Chicks need supplemental heat until they are fully feathered, usually around 6–8 weeks of age. Start at 90–95°F and reduce by 5°F each week. If chicks huddle under the lamp they're too cold; if they avoid it, they're too hot."
+    },
+    {
+      "q": "What should I feed my chicks?",
+      "a": "Feed chick starter crumbles for the first 8 weeks. Switch to grower feed from 8–18 weeks, then layer pellets once they start laying. Always have fresh, clean water available. Avoid treats until 3+ weeks of age."
+    },
+    {
+      "q": "When can chicks go outside?",
+      "a": "Chicks can be introduced to outdoor time on warm days (70°F+) once fully feathered (6–8 weeks). Always supervise for predators and watch for chilling."
+    }
+  ],
+  "faqSection": {
+    "label": "Questions",
+    "title": "Frequently Asked Questions"
+  },
+  "faqs": [
+    {
+      "q": "Do you ship chicks?",
+      "a": "At this time we do local pickup only in Dayton, Texas. We do ship hatching eggs via USPS Priority Mail with careful packing to maximize hatch rates. Contact us for shipping details and pricing."
+    },
+    {
+      "q": "How do I place a preorder?",
+      "a": "The easiest way is to message us on Facebook! We post hatch updates and availability there first. You can also email or call us. A deposit may be required to hold your spot on popular hatches."
+    },
+    {
+      "q": "When are chicks typically available?",
+      "a": "We hatch throughout the spring and summer (roughly March–September). Check our hatch schedule above or follow our Facebook page for the most up-to-date availability."
+    },
+    {
+      "q": "Do you sell hatching eggs year-round?",
+      "a": "Hatching egg availability follows our hens' laying cycles. Spring and summer are best. We also sell fresh fertile eggs for eating when we have surplus."
+    },
+    {
+      "q": "Are the chicks sexed?",
+      "a": "Most of our chicks are sold straight run (unsexed). We occasionally have sexed pullets available, especially for older birds — ask us when you reach out."
+    },
+    {
+      "q": "Can I visit the farm?",
+      "a": "We do allow farm visits by appointment. Please message us ahead of time so we can set up a time. We are located in Dayton, Texas."
+    }
+  ],
+  "testimonialsSection": {
+    "label": "What People Say",
+    "title": "Happy Customers"
+  },
+  "testimonials": [
+    {
+      "name": "Jennifer M.",
+      "text": "The lavender Orpingtons I got from Oakshade Acres are absolutely stunning. They are so sweet and friendly — my kids love them! Will definitely be ordering again this spring.",
+      "stars": 5
+    },
+    {
+      "name": "Travis B.",
+      "text": "Hatching eggs arrived beautifully packed and I had an incredible hatch rate. These are high quality birds with great genetics. Highly recommend!",
+      "stars": 5
+    },
+    {
+      "name": "Samantha R.",
+      "text": "Wonderful experience! The bantam cochins are adorable and exactly as described. They were so helpful answering all my newbie questions.",
+      "stars": 5
+    },
+    {
+      "name": "Dale K.",
+      "text": "I've ordered from several breeders and Oakshade Acres is by far the best. Their Orpington line is exceptional. The chocolate birds are gorgeous.",
+      "stars": 5
+    }
+  ],
+  "footer": {
+    "logoImage": "/images/site/logo.jpg",
+    "brandName": "Oakshade Acres",
+    "brandText": "Quality chicks & hatching eggs\nDayton, Texas",
+    "getInTouch": {
+      "title": "Get in Touch",
+      "items": [
+        {
+          "label": "Facebook Page",
+          "href": "https://www.facebook.com/people/Oakshade-Orpington-Acres/61576026751769/"
+        },
+        {
+          "label": "Email Us",
+          "href": "mailto:oakshadeacreschks@gmail.com"
+        },
+        {
+          "label": "Call or Text",
+          "href": "tel:+19363671974"
+        }
+      ],
+      "note": "(936) 367-1974"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "items": [
+        {
+          "label": "Our Breeds",
+          "href": "#breeds"
+        },
+        {
+          "label": "Hatch Schedule",
+          "href": "#schedule"
+        },
+        {
+          "label": "How to Order",
+          "href": "#order"
+        },
+        {
+          "label": "Care Guide",
+          "href": "#care"
+        },
+        {
+          "label": "FAQ",
+          "href": "#faq"
+        }
+      ]
+    },
+    "copyright": "© 2026 Oakshade Acres · Dayton, Texas · Raising quality birds with heart"
+  }
+}

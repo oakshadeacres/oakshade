@@ -1,0 +1,39 @@
+---
+interface LinkItem { label: string; href: string }
+interface Props {
+  logoImage: string;
+  brandName: string;
+  brandText: string;
+  getInTouch: { title: string; items: LinkItem[]; note?: string };
+  quickLinks: { title: string; items: LinkItem[] };
+  copyright: string;
+}
+const { logoImage, brandName, brandText, getInTouch, quickLinks, copyright } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const logoSrc = logoImage.startsWith('http') ? logoImage : `${base}${logoImage}`;
+---
+<footer id="contact" class="contact-bg">
+  <div class="contact-grid">
+    <div class="contact-col">
+      <img src={logoSrc} alt={brandName} style="width:100px; border-radius:50%; margin-bottom:16px" />
+      <h3>{brandName}</h3>
+      <p set:html={brandText.replace(/\n/g, '<br/>')}></p>
+    </div>
+    <div class="contact-col">
+      <h3>{getInTouch.title}</h3>
+      {getInTouch.items.map((item) => (
+        <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined}>{item.label}</a>
+      ))}
+      {getInTouch.note && (
+        <p style="margin-top:8px; font-size:0.82rem" set:html={getInTouch.note.replace(/\n/g, '<br/>')}></p>
+      )}
+    </div>
+    <div class="contact-col">
+      <h3>{quickLinks.title}</h3>
+      {quickLinks.items.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </div>
+  </div>
+  <div class="footer-bar">{copyright}</div>
+</footer>

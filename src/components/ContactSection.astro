@@ -1,0 +1,34 @@
+---
+import ContactForm from './ContactForm.astro';
+
+interface InfoRow { icon: string; text: string }
+interface Props {
+  label: string;
+  title: string;
+  intro: string;
+  infoRows: InfoRow[];
+  email: string;
+  endpoint?: string;
+  breedOptions: string[];
+}
+const { label, title, intro, infoRows, email, endpoint = '', breedOptions } = Astro.props;
+---
+<section id="contact-form" class="section">
+  <div class="contact-row">
+    <div class="reveal-left">
+      <p class="section-label">{label}</p>
+      <h2 class="section-title">{title}</h2>
+      <div class="divider"></div>
+      <p style="color: var(--brown-mid); margin-bottom: 20px">{intro}</p>
+      <div style="display:flex; flex-direction:column; gap:14px; margin-top:8px">
+        {infoRows.map((row) => (
+          <div class="contact-info-row">
+            <span class="icon">{row.icon}</span>
+            <span class="text">{row.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <ContactForm email={email} endpoint={endpoint} breedOptions={breedOptions} />
+  </div>
+</section>

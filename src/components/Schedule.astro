@@ -1,0 +1,56 @@
+---
+interface Breed { name: string; spring: string[]; fall: string[] }
+interface Props {
+  label: string;
+  title: string;
+  sub: string;
+  springLabel: string;
+  fallLabel: string;
+  footerNote: string;
+  breeds: Breed[];
+}
+const { label, title, sub, springLabel, fallLabel, footerNote, breeds } = Astro.props;
+---
+<section id="schedule" class="section">
+  <p class="section-label reveal">{label}</p>
+  <h2 class="section-title reveal">{title}</h2>
+  <div class="divider reveal"></div>
+  <p class="section-sub reveal">{sub}</p>
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <div class="schedule-header">
+      <div></div>
+      <div class="schedule-season-header spring">{springLabel}</div>
+      <div class="schedule-season-header fall">{fallLabel}</div>
+    </div>
+    {breeds.map((b) => (
+      <div class="schedule-row reveal">
+        <div class="schedule-breed-label"><span>{b.name}</span></div>
+        <div class="schedule-season">
+          <div class="schedule-season-tag" style="color: var(--sage)">{springLabel}</div>
+          {b.spring.length === 0 ? (
+            <span class="schedule-empty">Not available this season</span>
+          ) : (
+            <ul>
+              {b.spring.map((v) => (
+                <li><span class="schedule-dot" style="background: var(--sage)"></span>{v}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div class="schedule-season">
+          <div class="schedule-season-tag" style="color: var(--brown)">{fallLabel}</div>
+          {b.fall.length === 0 ? (
+            <span class="schedule-empty">Not available this season</span>
+          ) : (
+            <ul>
+              {b.fall.map((v) => (
+                <li><span class="schedule-dot" style="background: var(--gold)"></span>{v}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    ))}
+    <p style="font-size:0.82rem; color:var(--brown-mid); margin-top:4px">{footerNote}</p>
+  </div>
+</section>

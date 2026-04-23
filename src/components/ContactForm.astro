@@ -1,0 +1,152 @@
+---
+interface Props {
+  email: string;
+  endpoint?: string;
+  breedOptions: string[];
+}
+const { email, endpoint = '', breedOptions } = Astro.props;
+---
+<div class="contact-form reveal-right" data-contact-form>
+  <form novalidate>
+    <div class="form-row">
+      <div class="form-group" data-group="name">
+        <label>Your Name *</label>
+        <input type="text" placeholder="Jane Smith" name="name" />
+        <span class="error" data-error="name"></span>
+      </div>
+      <div class="form-group" data-group="email">
+        <label>Email *</label>
+        <input type="email" placeholder="you@email.com" name="email" />
+        <span class="error" data-error="email"></span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone <span style="font-weight:400; text-transform:none; letter-spacing:0">(optional)</span></label>
+        <input type="tel" placeholder="(555) 000-0000" name="phone" />
+      </div>
+      <div class="form-group">
+        <label>I'm Interested In</label>
+        <select name="interest">
+          <option value="">Select one…</option>
+          <option>Day-old Chicks</option>
+          <option>Hatching Eggs</option>
+          <option>Fertile Eating Eggs</option>
+          <option>Pullets / Older Birds</option>
+          <option>General Question</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Breed Interest <span style="font-weight:400; text-transform:none; letter-spacing:0">(optional)</span></label>
+      <select name="breed">
+        <option value="">Select a breed…</option>
+        {breedOptions.map((b) => <option>{b}</option>)}
+      </select>
+    </div>
+    <div class="form-group" data-group="message">
+      <label>Message *</label>
+      <textarea placeholder="Tell us what you're looking for — quantity, timing, any questions…" name="message"></textarea>
+      <span class="error" data-error="message"></span>
+    </div>
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0"
+    />
+    <button class="form-submit" type="submit">Send Message</button>
+    <p data-form-error style="display:none; color:var(--barn-red, #b00); font-size:0.85rem; margin-top:10px; text-align:center"></p>
+  </form>
+</div>
+<div class="contact-form reveal-right" data-contact-success style="display:none">
+  <div class="form-success">
+    <div style="font-size:3rem; margin-bottom:12px">🐣</div>
+    <h3>Message Sent!</h3>
+    <p>Thanks! We got your message and will get back to you soon.</p>
+  </div>
+</div>
+
+<script is:inline define:vars={{ email, endpoint }}>
+  (function () {
+    const wrapper = document.querySelector('[data-contact-form]');
+    const success = document.querySelector('[data-contact-success]');
+    if (!wrapper) return;
+    const form = wrapper.querySelector('form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const errorEl = form.querySelector('[data-form-error]');
+
+    function showError(field, msg) {
+      const group = form.querySelector(`[data-group="${field}"]`);
+      const err = form.querySelector(`[data-error="${field}"]`);
+      if (msg) { group.classList.add('has-error'); err.textContent = msg; }
+      else { group.classList.remove('has-error'); err.textContent = ''; }
+    }
+
+    function showFormError(msg) {
+      if (!errorEl) return;
+      if (msg) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
+      else { errorEl.textContent = ''; errorEl.style.display = 'none'; }
+    }
+
+    function resetSubmit() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
+
+    function showSuccess() {
+      wrapper.style.display = 'none';
+      success.style.display = 'block';
+      success.classList.add('visible');
+    }
+
+    function mailtoFallback(data) {
+      const subject = encodeURIComponent(`Oakshade Acres Inquiry – ${data.interest || 'General'}`);
+      const body = encodeURIComponent(
+        `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone || 'Not provided'}\nInterested In: ${data.interest || 'Not specified'}\nBreed Interest: ${data.breed || 'Not specified'}\n\nMessage:\n${data.message}`
+      );
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      setTimeout(showSuccess, 800);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showFormError('');
+      const data = Object.fromEntries(new FormData(form).entries());
+      let ok = true;
+      if (!String(data.name || '').trim()) { showError('name', 'Required'); ok = false; } else showError('name', '');
+      if (!String(data.email || '').trim() || !/\S+@\S+\.\S+/.test(String(data.email))) { showError('email', 'Valid email required'); ok = false; } else showError('email', '');
+      if (!String(data.message || '').trim()) { showError('message', 'Required'); ok = false; } else showError('message', '');
+      if (!ok) return;
+
+      submitBtn.disabled = true;
+
+      if (!endpoint) {
+        submitBtn.textContent = 'Opening Email…';
+        mailtoFallback(data);
+        return;
+      }
+
+      submitBtn.textContent = 'Sending…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.ok) {
+          showSuccess();
+        } else {
+          showFormError(json.error || 'Could not send right now. Please email us directly.');
+          resetSubmit();
+        }
+      } catch {
+        showFormError('Network error. Please email us directly.');
+        resetSubmit();
+      }
+    });
+  })();
+</script>

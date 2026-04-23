@@ -1,121 +1,115 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import AnimalCard from '../components/AnimalCard.astro';
 import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Breeds from '../components/Breeds.astro';
+import Schedule from '../components/Schedule.astro';
+import Order from '../components/Order.astro';
+import ContactSection from '../components/ContactSection.astro';
+import PickupShipping from '../components/PickupShipping.astro';
+import CareGuide from '../components/CareGuide.astro';
+import FAQ from '../components/FAQ.astro';
+import Testimonials from '../components/Testimonials.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import site from '../content/site.json';
 
-const chickens = await getCollection('chickens');
-const goats = await getCollection('goats');
+const breedEntries = await getCollection('breeds');
+const breeds = breedEntries
+  .map((e) => ({ id: e.id, ...e.data }))
+  .sort((a, b) => a.order - b.order);
 
-// Get first 2 of each for featured section
-const featuredChickens = chickens.slice(0, 2);
-const featuredGoats = goats.slice(0, 2);
+const scheduleBreeds = breeds.map((b) => ({
+  name: b.name,
+  spring: b.spring,
+  fall: b.fall,
+}));
+
+const breedOptions: string[] = [];
+breeds.forEach((b) => {
+  if (b.varieties.length) {
+    b.varieties.forEach((v) => breedOptions.push(`${b.name} – ${v}`));
+  } else {
+    breedOptions.push(b.name);
+  }
+});
+breedOptions.push('Multiple Breeds');
 ---
-
-<Layout title="Home" description="Welcome to Oakshade Acres - Quality chickens and goats raised with care">
-  <!-- Hero Section -->
-  <section class="bg-earth-700 text-cream py-16 sm:py-24">
-    <div class="max-w-6xl mx-auto px-4 text-center">
-      <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl mb-6">
-        Welcome to Oakshade Acres
-      </h1>
-      <p class="text-earth-200 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
-        Quality chickens and goats raised with care in a natural, sustainable environment.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a
-          href="/chickens"
-          class="px-6 py-3 bg-forest text-cream rounded-lg hover:bg-forest-light transition-colors font-medium"
-        >
-          View Our Chickens
-        </a>
-        <a
-          href="/goats"
-          class="px-6 py-3 bg-barn-red text-cream rounded-lg hover:bg-barn-light transition-colors font-medium"
-        >
-          View Our Goats
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="py-16 bg-earth-50">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="font-serif text-3xl text-earth-800 mb-6">About Our Farm</h2>
-        <p class="text-earth-600 leading-relaxed mb-4">
-          At Oakshade Acres, we take pride in raising healthy, happy animals. Our chickens and goats
-          are raised in a natural environment with plenty of space to roam and forage.
-        </p>
-        <p class="text-earth-600 leading-relaxed">
-          Whether you're looking for laying hens, heritage breed chickens, or friendly goats,
-          we're here to help you find the perfect addition to your farm or homestead.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Chickens -->
-  {featuredChickens.length > 0 && (
-    <section class="py-16">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="font-serif text-3xl text-earth-800">Our Chickens</h2>
-          <a href="/chickens" class="text-forest hover:text-forest-light transition-colors font-medium">
-            View All &rarr;
-          </a>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          {featuredChickens.map((chicken) => (
-            <AnimalCard
-              name={chicken.data.name}
-              images={chicken.data.images}
-              description={chicken.data.description}
-              availability={chicken.data.availability}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- Featured Goats -->
-  {featuredGoats.length > 0 && (
-    <section class="py-16 bg-earth-50">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="font-serif text-3xl text-earth-800">Our Goats</h2>
-          <a href="/goats" class="text-forest hover:text-forest-light transition-colors font-medium">
-            View All &rarr;
-          </a>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          {featuredGoats.map((goat) => (
-            <AnimalCard
-              name={goat.data.name}
-              images={goat.data.images}
-              description={goat.data.description}
-              availability={goat.data.availability}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- CTA Section -->
-  <section class="py-16 bg-forest text-cream">
-    <div class="max-w-6xl mx-auto px-4 text-center">
-      <h2 class="font-serif text-3xl mb-4">Interested in Our Animals?</h2>
-      <p class="text-forest-light text-lg mb-8 max-w-2xl mx-auto" style="color: #a8d5ba;">
-        We'd love to hear from you! Get in touch to learn more about availability and pricing.
-      </p>
-      <a
-        href="/contact"
-        class="inline-block px-8 py-4 bg-cream text-forest rounded-lg hover:bg-earth-100 transition-colors font-medium text-lg"
-      >
-        Contact Us
-      </a>
-    </div>
-  </section>
+<Layout>
+  <Nav logo={site.nav.logo} links={site.nav.links} cta={site.nav.cta} />
+  <Hero
+    logoImage={site.hero.logoImage}
+    title={site.hero.title}
+    tagline={site.hero.tagline}
+    badges={site.hero.badges}
+    ctas={site.hero.ctas}
+  />
+  <About
+    label={site.about.label}
+    title={site.about.title}
+    paragraphs={site.about.paragraphs}
+    image={site.about.image}
+  />
+  <Breeds
+    label={site.breedsSection.label}
+    title={site.breedsSection.title}
+    breeds={breeds}
+  />
+  <Schedule
+    label={site.schedule.label}
+    title={site.schedule.title}
+    sub={site.schedule.sub}
+    springLabel={site.schedule.springLabel}
+    fallLabel={site.schedule.fallLabel}
+    footerNote={site.schedule.footerNote}
+    breeds={scheduleBreeds}
+  />
+  <Order
+    label={site.order.label}
+    title={site.order.title}
+    intro={site.order.intro}
+    steps={site.order.steps}
+    facebookUrl={site.order.facebookUrl}
+    ctaLabel={site.order.ctaLabel}
+    ctaNote={site.order.ctaNote}
+  />
+  <ContactSection
+    label={site.contact.label}
+    title={site.contact.title}
+    intro={site.contact.intro}
+    infoRows={site.contact.infoRows}
+    email={site.contact.email}
+    endpoint={site.contact.endpoint}
+    breedOptions={breedOptions}
+  />
+  <PickupShipping
+    label={site.pickupShippingSection.label}
+    title={site.pickupShippingSection.title}
+    cards={site.pickupShipping}
+  />
+  <CareGuide
+    label={site.careGuideSection.label}
+    title={site.careGuideSection.title}
+    sub={site.careGuideSection.sub}
+    items={site.careGuide}
+  />
+  <FAQ
+    label={site.faqSection.label}
+    title={site.faqSection.title}
+    items={site.faqs}
+  />
+  <Testimonials
+    label={site.testimonialsSection.label}
+    title={site.testimonialsSection.title}
+    items={site.testimonials}
+  />
+  <SiteFooter
+    logoImage={site.footer.logoImage}
+    brandName={site.footer.brandName}
+    brandText={site.footer.brandText}
+    getInTouch={site.footer.getInTouch}
+    quickLinks={site.footer.quickLinks}
+    copyright={site.footer.copyright}
+  />
 </Layout>

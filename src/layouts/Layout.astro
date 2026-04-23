@@ -1,35 +1,55 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import '../styles/global.css';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
-const { title, description = 'Oakshade Acres - Quality chickens and goats' } = Astro.props;
----
+const {
+  title = 'Oakshade Acres',
+  description = 'Quality chicks and hatching eggs — specialty English Orpingtons, Polish, and Bantams, raised with care in Dayton, Texas.',
+} = Astro.props;
 
-<!doctype html>
-<html lang="en">
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!DOCTYPE html>
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Oakshade Acres</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
   </head>
-  <body class="min-h-screen bg-cream text-earth-800 font-sans flex flex-col">
-    <Header />
-    <main class="flex-grow">
-      <slot />
-    </main>
-    <Footer />
+  <body>
+    <slot />
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+      document
+        .querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger')
+        .forEach((el) => observer.observe(el));
+    </script>
   </body>
 </html>
-
-<style is:global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

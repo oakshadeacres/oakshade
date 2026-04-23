@@ -1,0 +1,30 @@
+---
+interface Props {
+  logo: string;
+  links: { label: string; href: string }[];
+  cta: { label: string; href: string };
+}
+const { logo, links, cta } = Astro.props;
+---
+<nav class="nav">
+  <div class="nav-logo">{logo}</div>
+  <div class="nav-links">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </div>
+  <a class="nav-cta" href={cta.href}>{cta.label}</a>
+  <button class="hamburger" aria-label="Open menu" data-menu-toggle>
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" data-mobile-menu>
+  {links.map((l) => <a href={l.href}>{l.label}</a>)}
+</div>
+
+<script>
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+  toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).tagName === 'A') menu.classList.remove('open');
+  });
+</script>

@@ -1,0 +1,238 @@
+---
+interface Trait { label: string; val: string }
+interface BreedImage { url: string; variety?: string }
+interface Breed {
+  id: string;
+  name: string;
+  specialty: boolean;
+  description: string;
+  traits: Trait[];
+  varieties: string[];
+  images: BreedImage[];
+}
+interface Props {
+  label: string;
+  title: string;
+  breeds: Breed[];
+}
+const { label, title, breeds } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const breedsData = breeds.map((b) => ({
+  ...b,
+  images: b.images.map((img) => ({
+    url: img.url.startsWith('http') ? img.url : `${base}${img.url}`,
+    variety: img.variety,
+  })),
+}));
+---
+<section id="breeds" class="section-full breeds-bg">
+  <div class="section-inner">
+    <p class="section-label reveal">{label}</p>
+    <h2 class="section-title reveal">{title}</h2>
+    <div class="divider reveal"></div>
+
+    <div class="breed-tabs stagger" data-breed-tabs>
+      {breedsData.map((b, i) => (
+        <button
+          class={`breed-tab${i === 0 ? ' active' : ''}`}
+          data-breed-tab={b.id}
+          type="button"
+        >
+          {b.name} {b.specialty && <span>★</span>}
+        </button>
+      ))}
+    </div>
+
+    <div class="breed-card reveal" data-breed-card>
+      <div class="breed-gallery" data-breed-gallery>
+        <div class="breed-img" data-breed-img>
+          <img data-breed-img-el src="" alt="" style="display:none" />
+          <div data-breed-img-label-fallback style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <ellipse cx="18" cy="22" rx="12" ry="9" stroke="#7a9e6e" stroke-width="1.8"/>
+              <circle cx="18" cy="11" r="6" stroke="#7a9e6e" stroke-width="1.8"/>
+              <path d="M24 8l4-2M12 8l-4-2" stroke="#7a9e6e" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span data-breed-img-name style="line-height:1.5"></span>
+          </div>
+          <div class="breed-img-label" data-breed-img-counter></div>
+        </div>
+        <button class="breed-gallery-arrow prev" data-breed-prev aria-label="Previous" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="breed-gallery-arrow next" data-breed-next aria-label="Next" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="breed-gallery-dots" data-breed-dots></div>
+      </div>
+
+      <div class="breed-info">
+        <span class="breed-specialty" data-breed-specialty style="display:none">★ Our Specialty</span>
+        <h3 data-breed-name></h3>
+        <p class="breed-desc" data-breed-desc></p>
+        <div class="breed-traits" data-breed-traits></div>
+        <div class="breed-varieties">
+          <h4>Varieties We Carry</h4>
+          <div class="variety-pills" data-breed-varieties></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ breedsData }}>
+  (function () {
+    const tabs = document.querySelectorAll('[data-breed-tab]');
+    const specialtyEl = document.querySelector('[data-breed-specialty]');
+    const nameEl = document.querySelector('[data-breed-name]');
+    const descEl = document.querySelector('[data-breed-desc]');
+    const traitsEl = document.querySelector('[data-breed-traits]');
+    const varietiesEl = document.querySelector('[data-breed-varieties]');
+    const imgEl = document.querySelector('[data-breed-img-el]');
+    const imgFallback = document.querySelector('[data-breed-img-label-fallback]');
+    const imgNameEl = document.querySelector('[data-breed-img-name]');
+    const counterEl = document.querySelector('[data-breed-img-counter]');
+    const dotsEl = document.querySelector('[data-breed-dots]');
+    const prevBtn = document.querySelector('[data-breed-prev]');
+    const nextBtn = document.querySelector('[data-breed-next]');
+
+    let activeId = breedsData[0]?.id;
+    let slide = 0;
+
+    function current() {
+      return breedsData.find((b) => b.id === activeId) || breedsData[0];
+    }
+
+    function renderGallery() {
+      const b = current();
+      const hasImage = b.images.length > 0;
+      const total = hasImage ? b.images.length : (b.varieties.length || 1);
+      if (slide >= total) slide = 0;
+
+      if (hasImage) {
+        const img = b.images[slide];
+        imgEl.src = img.url;
+        imgEl.alt = `${b.name}${img.variety ? ' — ' + img.variety : ''}`;
+        imgEl.style.display = 'block';
+        imgFallback.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        imgFallback.style.display = 'flex';
+        const label = b.varieties.length ? b.varieties[slide] : b.name;
+        imgNameEl.textContent = `${label} ${b.name}`.trim();
+      }
+      counterEl.textContent = total > 1 ? `${slide + 1} / ${total}` : '';
+      counterEl.style.display = total > 1 ? 'block' : 'none';
+      prevBtn.style.display = total > 1 ? 'flex' : 'none';
+      nextBtn.style.display = total > 1 ? 'flex' : 'none';
+
+      dotsEl.innerHTML = '';
+      if (total > 1) {
+        for (let i = 0; i < total; i++) {
+          const d = document.createElement('button');
+          d.className = `breed-gallery-dot${i === slide ? ' active' : ''}`;
+          d.type = 'button';
+          d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          d.addEventListener('click', () => { slide = i; renderGallery(); renderVarietyPills(); });
+          dotsEl.appendChild(d);
+        }
+      }
+    }
+
+    function renderVarietyPills() {
+      const b = current();
+      const hasImage = b.images.length > 0;
+      const currentVariety = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide] || null);
+      varietiesEl.innerHTML = '';
+      b.varieties.forEach((v, i) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.textContent = v;
+
+        if (hasImage) {
+          const firstMatch = b.images.findIndex((im) => im.variety === v);
+          const isEmpty = firstMatch === -1;
+          const isActive = currentVariety === v;
+          pill.className = `variety-pill${isActive ? ' active' : ''}${isEmpty ? ' variety-pill-empty' : ''}`;
+          if (isEmpty) {
+            pill.setAttribute('aria-disabled', 'true');
+          } else {
+            pill.addEventListener('click', () => { slide = firstMatch; renderGallery(); renderVarietyPills(); });
+          }
+        } else {
+          pill.className = `variety-pill${i === slide ? ' active' : ''}`;
+          pill.addEventListener('click', () => { slide = i; renderGallery(); renderVarietyPills(); });
+        }
+
+        varietiesEl.appendChild(pill);
+      });
+    }
+
+    function renderAll() {
+      const b = current();
+      specialtyEl.style.display = b.specialty ? 'inline-block' : 'none';
+      nameEl.textContent = b.name;
+      descEl.textContent = b.description;
+      traitsEl.innerHTML = '';
+      b.traits.forEach((t) => {
+        const trait = document.createElement('div');
+        trait.className = 'trait';
+        const label = document.createElement('div');
+        label.className = 'trait-label';
+        label.textContent = t.label;
+        const val = document.createElement('div');
+        val.className = 'trait-val';
+        val.textContent = t.val;
+        trait.appendChild(label);
+        trait.appendChild(val);
+        traitsEl.appendChild(trait);
+      });
+      renderGallery();
+      renderVarietyPills();
+    }
+
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => {
+        tabs.forEach((x) => x.classList.remove('active'));
+        t.classList.add('active');
+        activeId = t.getAttribute('data-breed-tab');
+        slide = 0;
+        renderAll();
+      });
+    });
+
+    function slideCount(b) {
+      return b.images.length || b.varieties.length || 1;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      const b = current();
+      const total = slideCount(b);
+      slide = (slide - 1 + total) % total;
+      renderGallery();
+      renderVarietyPills();
+    });
+    nextBtn.addEventListener('click', () => {
+      const b = current();
+      const total = slideCount(b);
+      slide = (slide + 1) % total;
+      renderGallery();
+      renderVarietyPills();
+    });
+
+    // Touch swipe
+    const gallery = document.querySelector('[data-breed-gallery]');
+    let startX = null;
+    gallery.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    gallery.addEventListener('touchend', (e) => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx > 40) prevBtn.click();
+      else if (dx < -40) nextBtn.click();
+      startX = null;
+    });
+
+    renderAll();
+  })();
+</script>

@@ -1,0 +1,22 @@
+---
+interface Card { icon: string; title: string; text: string }
+interface Props {
+  label: string;
+  title: string;
+  cards: Card[];
+}
+const { label, title, cards } = Astro.props;
+---
+<section class="section">
+  <p class="section-label reveal">{label}</p>
+  <h2 class="section-title reveal">{title}</h2>
+  <div class="divider reveal"></div>
+  <div class="info-grid stagger">
+    {cards.map((c) => (
+      <div class="info-card">
+        <h3><span style="font-size:1.4rem">{c.icon}</span> {c.title}</h3>
+        <p>{c.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

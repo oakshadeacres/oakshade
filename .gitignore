@@ -21,3 +21,7 @@ Thumbs.db
 
 # Astro
 .astro/
+
+# local-only
+Oakshade.zip
+admin/.env
