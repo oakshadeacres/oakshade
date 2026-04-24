@@ -185,11 +185,13 @@ async function processImage(buffer, originalName, relativeDir) {
   const thumbName = `${timestamp}-${baseName}-thumb.webp`;
 
   await sharp(buffer)
+    .rotate()
     .resize(IMAGE_CONFIG.full.maxWidth, null, { withoutEnlargement: true, fit: 'inside' })
     .webp({ quality: IMAGE_CONFIG.full.quality })
     .toFile(path.join(dir, fullName));
 
   await sharp(buffer)
+    .rotate()
     .resize(IMAGE_CONFIG.thumb.maxWidth, null, { withoutEnlargement: true, fit: 'inside' })
     .webp({ quality: IMAGE_CONFIG.thumb.quality })
     .toFile(path.join(dir, thumbName));
