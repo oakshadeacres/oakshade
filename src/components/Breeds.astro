@@ -25,6 +25,16 @@ const breedsData = breeds.map((b) => ({
     variety: img.variety,
   })),
 }));
+
+const firstBreed = breedsData[0];
+const firstImage = firstBreed?.images[0];
+const initialSrc = firstImage?.url ?? '';
+const initialAlt = firstImage
+  ? (firstImage.variety ? `${firstImage.variety} ${firstBreed.name}` : firstBreed.name)
+  : '';
+const initialFallbackName = firstBreed && !firstImage
+  ? `${firstBreed.varieties[0] ?? ''} ${firstBreed.name}`.trim()
+  : '';
 ---
 <section id="breeds" class="section-full breeds-bg">
   <div class="section-inner">
@@ -47,14 +57,14 @@ const breedsData = breeds.map((b) => ({
     <div class="breed-card reveal" data-breed-card>
       <div class="breed-gallery" data-breed-gallery>
         <div class="breed-img" data-breed-img>
-          <img data-breed-img-el src="" alt="" style="display:none" />
-          <div data-breed-img-label-fallback style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+          <img data-breed-img-el src={initialSrc} alt={initialAlt} style={firstImage ? '' : 'display:none'} />
+          <div data-breed-img-label-fallback style={`display:${firstImage ? 'none' : 'flex'}; flex-direction:column; align-items:center; justify-content:center; gap:10px;`}>
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
               <ellipse cx="18" cy="22" rx="12" ry="9" stroke="#7a9e6e" stroke-width="1.8"/>
               <circle cx="18" cy="11" r="6" stroke="#7a9e6e" stroke-width="1.8"/>
               <path d="M24 8l4-2M12 8l-4-2" stroke="#7a9e6e" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
-            <span data-breed-img-name style="line-height:1.5"></span>
+            <span data-breed-img-name style="line-height:1.5">{initialFallbackName}</span>
           </div>
           <div class="breed-img-label" data-breed-img-counter></div>
         </div>
@@ -113,7 +123,7 @@ const breedsData = breeds.map((b) => ({
       if (hasImage) {
         const img = b.images[slide];
         imgEl.src = img.url;
-        imgEl.alt = `${b.name}${img.variety ? ' — ' + img.variety : ''}`;
+        imgEl.alt = img.variety ? `${img.variety} ${b.name}` : b.name;
         imgEl.style.display = 'block';
         imgFallback.style.display = 'none';
       } else {

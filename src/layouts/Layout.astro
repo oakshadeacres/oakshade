@@ -1,17 +1,54 @@
 ---
 import '../styles/global.css';
+import site from '../content/site.json';
 
 interface Props {
   title?: string;
   description?: string;
+  path?: string;
+  ogImage?: string;
 }
 
 const {
-  title = 'Oakshade Acres',
-  description = 'Quality chicks and hatching eggs — specialty English Orpingtons, Polish, and Bantams, raised with care in Dayton, Texas.',
+  title = 'Oakshade Acres – English Orpingtons & Specialty Chicks | Dayton, TX',
+  description = 'Quality day-old chicks and hatching eggs in Dayton, Texas. Specializing in English Orpingtons (Lavender, Chocolate, Jubilee, Gold/Silver Laced), Polish, and Bantam Cochins & Easter Eggers. Small-farm quality, hand-raised with care.',
+  path = '/',
+  ogImage = '/images/site/logo.jpg',
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteOrigin = Astro.site?.origin ?? 'https://oakshadeacres.github.io';
+const pathWithSlash = path === '/' ? '/' : (path.startsWith('/') ? path : `/${path}`);
+const canonical = `${siteOrigin}${base}${pathWithSlash}`;
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteOrigin}${base}${ogImage}`;
+
+// Pull contact details from site.json so JSON-LD stays in sync with the admin
+const phoneHref = site.footer.getInTouch.items.find((i) => i.href.startsWith('tel:'))?.href ?? '';
+const phone = phoneHref.replace('tel:', '') || '+19363671974';
+const email = site.contact.email;
+const facebookUrl = site.order.facebookUrl;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Oakshade Acres',
+  description,
+  url: canonical,
+  image: ogImageUrl,
+  telephone: phone,
+  email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Dayton',
+    addressRegion: 'TX',
+    addressCountry: 'US',
+  },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Liberty County, Texas',
+  },
+  sameAs: [facebookUrl].filter(Boolean),
+};
 ---
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -20,6 +57,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Oakshade Acres" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,6 +79,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
     <script is:inline>
       document.documentElement.classList.remove('no-js');
       document.documentElement.classList.add('js');

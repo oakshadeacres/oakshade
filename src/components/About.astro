@@ -13,7 +13,7 @@ const imgSrc = image ? (image.startsWith('http') ? image : `${base}${image}`) : 
   <div class="about-grid">
     {imgSrc ? (
       <div class="about-img reveal-left">
-        <img src={imgSrc} alt="Farm photo" />
+        <img src={imgSrc} alt={`${title} — Oakshade Acres`} />
       </div>
     ) : (
       <div class="about-img-placeholder reveal-left">
