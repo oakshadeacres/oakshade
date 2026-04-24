@@ -27,14 +27,16 @@ varieties:
   - Buff
   - Jubilee
 images:
-  - url: /images/breeds/orpingtons/01-lavender-black.jpg
-    variety: 'Lavender/Black '
-  - url: /images/breeds/orpingtons/02-mottled.jpg
-    variety: 'Chocolate/Mauve/Splash '
-  - url: /images/breeds/orpingtons/03-chocolate-splash.jpg
-  - url: /images/breeds/orpingtons/05-adult-chick.jpg
+  - url: /images/breeds/orpingtons/1776967573621-chocolaced.webp
     variety: Chocolate Laced
-  - url: /images/breeds/orpingtons/04-gold-laced.jpg
+  - url: >-
+      /images/breeds/orpingtons/1776967585930-662891068-122186569784867558-1085497176277836907-n.webp
+    variety: Chocolate Laced
+  - url: >-
+      /images/breeds/orpingtons/1776967597517-665988332-122186569574867558-3474538190247921349-n.webp
+    variety: Chocolate Laced
+  - url: >-
+      /images/breeds/orpingtons/1776967611081-672674120-122188102352867558-6275461667022447544-n.webp
     variety: Gold Laced
 spring:
   - Lavender / Black Split to Lavender
