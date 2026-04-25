@@ -38,7 +38,7 @@
     "tagline": "Specialty Orpingtons and more, raised with care in Dayton, Texas. Small flock, big heart.",
     "badges": [
       {
-        "label": "English Orpington Specialists",
+        "label": "English Orpington ",
         "sage": false
       },
       {
@@ -69,10 +69,10 @@
   },
   "about": {
     "label": "Our Story",
-    "title": "A Family Flock in Dayton, Texas",
+    "title": "A Family Farm in Dayton, Texas",
     "paragraphs": [
       "Oakshade Acres started the way most backyard flocks do — with a handful of chicks and a whole lot of curiosity. What began as a hobby quickly turned into a passion for raising quality birds with exceptional temperaments and stunning colors.",
-      "We specialize in English Orpingtons, offering a wide range of colors from the classic Buff to rare Lavender and Chocolate varieties. We also keep Polish, Bantam Cochins, and Bantam Easter Eggers for those who love variety in their flocks.",
+      "We specialize in English Orpingtons, offering a wide range of colors from the classic Buff to the rare Mauve and Chocolate Laced varieties. We also keep Polish, Bantam Cochins, and Bantam Easter Eggers for those who love variety in their flocks.",
       "Every bird here is raised with care, handled from hatch day, and loved before they ever reach your farm. We're a small operation — and we think that makes all the difference."
     ],
     "image": ""
@@ -92,7 +92,7 @@
   "order": {
     "label": "How It Works",
     "title": "How to Preorder",
-    "intro": "Ordering is simple — we handle everything through Facebook Messenger so you always reach us directly.",
+    "intro": "Ordering is simple — we handle everything through direct messaging so you always reach us directly.",
     "steps": [
       {
         "title": "Find Us on Facebook",
@@ -108,7 +108,7 @@
       },
       {
         "title": "Pickup in Dayton, TX",
-        "text": "When your chicks are ready, we'll schedule a pickup time at our farm. Hatching eggs can ship USPS."
+        "text": "When your chicks are ready, we'll schedule a pickup time at our farm.\nLive Chicks and Hatching Eggs Can Be Shipped through USPS"
       }
     ],
     "facebookUrl": "https://www.facebook.com/people/Oakshade-Orpington-Acres/61576026751769/",
@@ -186,7 +186,7 @@
     },
     {
       "q": "When can chicks go outside?",
-      "a": "Chicks can be introduced to outdoor time on warm days (70°F+) once fully feathered (6–8 weeks). Always supervise for predators and watch for chilling."
+      "a": "Chicks can be introduced to outdoor time on warm days (70°F+) once fully feathered (6–8 weeks). Always supervise for protection against predators and bullying from your flock.\nCan Be released Outdoors Full Time Around 8-10 weeks if temperature does not drop below 50°F."
     }
   ],
   "faqSection": {
@@ -247,7 +247,7 @@
   ],
   "footer": {
     "logoImage": "/images/site/logo.jpg",
-    "brandName": "Oakshade Acres",
+    "brandName": "Oakshade Orpington Acres",
     "brandText": "Quality chicks & hatching eggs\nDayton, Texas",
     "getInTouch": {
       "title": "Get in Touch",
@@ -292,6 +292,6 @@
         }
       ]
     },
-    "copyright": "© 2026 Oakshade Acres · Dayton, Texas · Raising quality birds with heart"
+    "copyright": "© 2026 Oakshade Acres · Dayton, Texas · Raising quality birds with care and integrity"
   }
 }

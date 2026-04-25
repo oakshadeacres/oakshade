@@ -10,11 +10,13 @@ traits:
   - label: Temperament
     val: Very Docile
   - label: Egg Color
-    val: Light Brown
+    val: Small Cream or Light Brown Eggs
   - label: Egg Production
-    val: Low
-  - label: Best For
-    val: 'Pets, Broodies'
+    val: 100 - 150 Eggs Per Year
+  - label: Size
+    val: Hen ~ 1.5lbs Rooster ~2lbs
+  - label: Purpose
+    val: 'Ornamental,Pets'
 varieties:
   - Calico
   - Chocolate Mottled

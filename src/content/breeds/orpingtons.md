@@ -4,18 +4,20 @@ specialty: true
 order: 1
 description: >-
   Our pride and joy. English Orpingtons are one of the most beloved dual-purpose
-  breeds — calm, friendly, and beautiful. We specialize in a wide range of
+  breeds — calm, friendly, and captivating. We specialize in a wide range of
   colors, including many rare and hard-to-find varieties. Great for families,
   backyard flocks, and breeding projects.
 traits:
   - label: Temperament
     val: Calm & Gentle
   - label: Egg Color
-    val: Light Brown
+    val: Large Tan/Light Brown Eggs
   - label: Egg Production
-    val: Good Layer
-  - label: Best For
-    val: 'Families, Showing'
+    val: 150 - 280 Eggs Per Year
+  - label: Size
+    val: Hen 8lbs-10lbs Rooster 10lbs-15lbs
+  - label: Purpose
+    val: Dual Purpose
 varieties:
   - Gold Laced
   - Silver Laced
