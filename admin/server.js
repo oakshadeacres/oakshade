@@ -370,21 +370,30 @@ app.delete('/api/images', (req, res) => {
 app.post('/api/deploy', (req, res) => {
   const timestamp = new Date().toISOString();
   const commitMsg = `Content update ${timestamp}`;
-  exec(
-    `git add -A && git commit -m "${commitMsg}" && git push`,
-    { cwd: PROJECT_ROOT },
-    (err, stdout, stderr) => {
-      if (err) {
-        if (stderr.includes('nothing to commit') || stdout.includes('nothing to commit')) {
-          return res.json({ success: true, message: 'No changes to deploy' });
-        }
-        console.error('Deploy failed:', stderr);
-        return res.status(500).json({ error: 'Deploy failed', details: stderr });
-      }
-      console.log('Deploy successful:', stdout);
-      res.json({ success: true, message: 'Deployed successfully' });
+  // Stage any local edits, commit if there are staged changes, rebase onto
+  // remote to integrate work from other machines (e.g. the dev box pushing
+  // directly), then push. Pulling before pushing prevents the "fetch first"
+  // rejection that occurs when two admin instances deploy independently.
+  const cmd = [
+    'git add -A',
+    `git diff --cached --quiet || git commit -m "${commitMsg}"`,
+    'git pull --rebase origin main',
+    'git push origin main',
+  ].join(' && ');
+  exec(cmd, { cwd: PROJECT_ROOT }, (err, stdout, stderr) => {
+    if (err) {
+      console.error('Deploy failed:', stderr);
+      return res.status(500).json({ error: 'Deploy failed', details: stderr });
     }
-  );
+    const nothingNew =
+      stdout.includes('Everything up-to-date') &&
+      !stdout.includes('main ->');
+    if (nothingNew) {
+      return res.json({ success: true, message: 'No changes to deploy' });
+    }
+    console.log('Deploy successful:', stdout);
+    res.json({ success: true, message: 'Deployed successfully' });
+  });
 });
 
 // Followups (unchanged)
