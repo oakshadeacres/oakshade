@@ -154,6 +154,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(IMAGES_DIR));
+app.use('/vendor/cropperjs', express.static(path.join(__dirname, 'node_modules', 'cropperjs', 'dist')));
 
 const upload = multer({
   storage: multer.memoryStorage(),

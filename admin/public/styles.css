@@ -568,3 +568,91 @@ body {
   .tab { padding: 0.75rem 0.75rem; font-size: 0.85rem; }
   .image-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ===== Crop modal ===== */
+.crop-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 16, 12, 0.88);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.crop-modal-overlay[hidden] { display: none; }
+.crop-modal {
+  background: var(--earth-800);
+  color: var(--cream);
+  border-radius: 10px;
+  width: min(900px, 100%);
+  max-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.crop-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--earth-700);
+  background: var(--earth-700);
+}
+.crop-counter {
+  font-size: 0.9rem;
+  color: var(--earth-200);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.crop-cancel {
+  background: transparent;
+  border: 0;
+  color: var(--cream);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+.crop-cancel:hover { background: rgba(255,255,255,0.1); }
+.crop-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: min(70vh, 600px);
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.crop-stage .crop-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+.crop-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--earth-700);
+  border-top: 1px solid var(--earth-600);
+}
+.crop-toolbar .btn { flex: 0 0 auto; }
+.crop-toolbar .crop-next { margin-left: auto; }
+.crop-toolbar .crop-zoom-in,
+.crop-toolbar .crop-zoom-out {
+  font-size: 1.1rem;
+  font-weight: 600;
+  min-width: 2.5rem;
+}
+
+@media (max-width: 480px) {
+  .crop-modal-overlay { padding: 0; }
+  .crop-modal { width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; }
+  .crop-stage { height: auto; flex: 1 1 auto; }
+  .crop-toolbar .crop-next { margin-left: 0; flex: 1 1 100%; order: 99; }
+}

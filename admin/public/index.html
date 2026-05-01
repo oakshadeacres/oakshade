@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oakshade Acres Admin</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/vendor/cropperjs/cropper.min.css">
 </head>
 <body>
   <header class="header">
@@ -65,6 +66,26 @@
     </div>
   </div>
 
+  <div id="crop-modal" class="crop-modal-overlay" hidden>
+    <div class="crop-modal">
+      <header class="crop-modal-header">
+        <span class="crop-counter"></span>
+        <button type="button" class="crop-cancel" title="Cancel">&times;</button>
+      </header>
+      <div class="crop-stage">
+        <img class="crop-img" alt="">
+      </div>
+      <footer class="crop-toolbar">
+        <button type="button" class="btn btn-secondary crop-zoom-out" title="Zoom out">&minus;</button>
+        <button type="button" class="btn btn-secondary crop-zoom-in" title="Zoom in">+</button>
+        <button type="button" class="btn btn-secondary crop-reset">Reset</button>
+        <button type="button" class="btn btn-secondary crop-skip">Use original</button>
+        <button type="button" class="btn btn-primary crop-next">Next</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/vendor/cropperjs/cropper.min.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

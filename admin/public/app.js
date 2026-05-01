@@ -380,27 +380,128 @@ function renderImageManager(target, images, varieties, onchange) {
     wrap.appendChild(grid);
 
     const uploader = h('div', { class: 'image-uploader' }, [
-      h('p', {}, 'Upload new images (JPEG/PNG/WebP, up to 10 at a time)'),
-      h('input', { type: 'file', multiple: true, accept: 'image/*', onchange: async (e) => {
+      h('p', {}, 'Upload new images (JPEG/PNG/WebP, up to 10 at a time). Each one opens a square crop editor — pan and zoom to frame it.'),
+      h('input', { type: 'file', multiple: true, accept: 'image/*', onchange: (e) => {
         const files = Array.from(e.target.files || []);
+        e.target.value = '';
         if (!files.length) return;
-        flashSaving();
-        const fd = new FormData();
-        fd.append('type', target);
-        files.forEach(f => fd.append('images', f));
-        const res = await fetch('/api/upload', { method: 'POST', body: fd });
-        if (!res.ok) { flashError('Upload failed'); return; }
-        const data = await res.json();
-        data.urls.forEach((u) => images.push({ url: u }));
-        onchange(images);
-        flashSaved();
-        refresh();
+        openCropQueue(files, async (results) => {
+          if (!results.length) return;
+          flashSaving();
+          const fd = new FormData();
+          fd.append('type', target);
+          results.forEach(r => fd.append('images', r.blob, r.name));
+          const res = await fetch('/api/upload', { method: 'POST', body: fd });
+          if (!res.ok) { flashError('Upload failed'); return; }
+          const data = await res.json();
+          data.urls.forEach((u) => images.push({ url: u }));
+          onchange(images);
+          flashSaved();
+          refresh();
+        });
       } }),
     ]);
     wrap.appendChild(uploader);
   }
   refresh();
   return wrap;
+}
+
+function openCropQueue(files, onDone) {
+  const modal = document.getElementById('crop-modal');
+  const img = modal.querySelector('.crop-img');
+  const counter = modal.querySelector('.crop-counter');
+  const btnNext = modal.querySelector('.crop-next');
+  const btnSkip = modal.querySelector('.crop-skip');
+  const btnReset = modal.querySelector('.crop-reset');
+  const btnZoomIn = modal.querySelector('.crop-zoom-in');
+  const btnZoomOut = modal.querySelector('.crop-zoom-out');
+  const btnCancel = modal.querySelector('.crop-cancel');
+
+  let cropper = null;
+  let currentUrl = null;
+  let index = 0;
+  let busy = false;
+  const results = [];
+
+  function loadCurrent() {
+    if (cropper) { cropper.destroy(); cropper = null; }
+    if (currentUrl) { URL.revokeObjectURL(currentUrl); currentUrl = null; }
+    const file = files[index];
+    counter.textContent = `${index + 1} of ${files.length} — ${file.name}`;
+    btnNext.textContent = (index === files.length - 1) ? 'Save all' : 'Next';
+    currentUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      cropper = new Cropper(img, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 1,
+        dragMode: 'move',
+        zoomable: true,
+        scalable: false,
+        rotatable: false,
+        movable: true,
+        toggleDragModeOnDblclick: false,
+        background: true,
+      });
+    };
+    img.src = currentUrl;
+  }
+
+  function close() {
+    if (cropper) { cropper.destroy(); cropper = null; }
+    if (currentUrl) { URL.revokeObjectURL(currentUrl); currentUrl = null; }
+    img.onload = null;
+    img.removeAttribute('src');
+    modal.hidden = true;
+    btnNext.onclick = btnSkip.onclick = btnReset.onclick = null;
+    btnZoomIn.onclick = btnZoomOut.onclick = btnCancel.onclick = null;
+  }
+
+  function advance() {
+    index += 1;
+    busy = false;
+    if (index >= files.length) {
+      const out = results.slice();
+      close();
+      onDone(out);
+    } else {
+      loadCurrent();
+    }
+  }
+
+  btnReset.onclick = () => { if (cropper) cropper.reset(); };
+  btnZoomIn.onclick = () => { if (cropper) cropper.zoom(0.1); };
+  btnZoomOut.onclick = () => { if (cropper) cropper.zoom(-0.1); };
+  btnCancel.onclick = () => { if (!busy) close(); };
+
+  btnSkip.onclick = () => {
+    if (busy) return;
+    const f = files[index];
+    results.push({ blob: f, name: f.name });
+    advance();
+  };
+
+  btnNext.onclick = () => {
+    if (busy || !cropper) return;
+    busy = true;
+    const canvas = cropper.getCroppedCanvas({
+      maxWidth: 2000,
+      maxHeight: 2000,
+      imageSmoothingQuality: 'high',
+    });
+    if (!canvas) { busy = false; return; }
+    canvas.toBlob((blob) => {
+      if (!blob) { busy = false; return; }
+      const original = files[index];
+      const baseName = original.name.replace(/\.[^.]+$/, '');
+      results.push({ blob, name: `${baseName}.jpg` });
+      advance();
+    }, 'image/jpeg', 0.92);
+  };
+
+  modal.hidden = false;
+  loadCurrent();
 }
 
 // ===== Tab: Schedule =====
