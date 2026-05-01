@@ -1,12 +1,12 @@
 :root {
-  --cream: oklch(93% 0.03 78);
-  --cream-dark: oklch(87% 0.05 76);
-  --brown: oklch(18% 0.05 44);
-  --brown-mid: oklch(36% 0.06 46);
-  --gold: oklch(66% 0.14 68);
-  --gold-light: oklch(88% 0.12 76);
-  --sage: oklch(48% 0.10 130);
-  --sage-light: oklch(82% 0.09 128);
+  --cream: #F2E8D5;
+  --cream-dark: #E5D5BC;
+  --brown: #3B4A2F;
+  --brown-mid: #6B5A3E;
+  --gold: #C8A96E;
+  --gold-light: #D4B896;
+  --sage: #4A5C35;
+  --sage-light: #BDC9A5;
   --font-head: 'Playfair Display', Georgia, serif;
   --font-body: 'Lato', Helvetica, sans-serif;
 }
