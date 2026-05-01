@@ -33,7 +33,7 @@
     }
   },
   "hero": {
-    "logoImage": "/images/site/logo.jpg",
+    "logoImage": "/images/site/logo.png",
     "title": "Quality Chicks & Hatching Eggs",
     "tagline": "Specialty Orpingtons and more, raised with care in Dayton, Texas. Small flock, big heart.",
     "badges": [
@@ -246,7 +246,7 @@
     }
   ],
   "footer": {
-    "logoImage": "/images/site/logo.jpg",
+    "logoImage": "/images/site/logo.png",
     "brandName": "Oakshade Orpington Acres",
     "brandText": "Quality chicks & hatching eggs\nDayton, Texas",
     "getInTouch": {

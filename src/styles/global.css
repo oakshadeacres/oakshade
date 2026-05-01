@@ -59,7 +59,7 @@ img { max-width: 100%; display: block; }
   text-align: center;
   border-bottom: 1px solid oklch(88% 0.03 78);
 }
-.hero-logo { width: 200px; margin: 0 auto 24px; border-radius: 50%; }
+.hero-logo { width: 200px; margin: 0 auto 24px; }
 .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); color: var(--brown); margin-bottom: 12px; }
 .hero-tagline { font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--brown-mid); max-width: 540px; margin: 0 auto 32px; font-weight: 300; }
 .hero-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 36px; }

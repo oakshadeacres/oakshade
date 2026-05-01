@@ -51,7 +51,7 @@ The brand pairs a classic, elegant serif with a clean, modern sans-serif.
 ### Elements
 - **Logos:**
   - **Text Logo:** Playfair Display, Bold, 1.1rem, `Gold Light` on `Brown`.
-  - **Image Logo:** Circular photo (`/images/site/logo.jpg`), often used as a 200px profile-style image in the Hero section.
+  - **Image Logo:** Emblem-style logo (`/images/site/logo.png`), used in the Hero section and Footer.
 - **Buttons:**
   - **Primary:** `Brown` background, `Cream` text, uppercase, bold.
   - **Secondary:** `Brown` border, `Brown` text, transparent background.
@@ -81,7 +81,7 @@ The brand pairs a classic, elegant serif with a clean, modern sans-serif.
 ---
 
 ## 5. Key Brand Assets
-- **Logo:** `public/images/site/logo.jpg`
+- **Logo:** `public/images/site/logo.png`
 - **Favicon:** `public/favicon.svg`
 - **Primary Font:** [Playfair Display (Google Fonts)](https://fonts.google.com/specimen/Playfair+Display)
 - **Secondary Font:** [Lato (Google Fonts)](https://fonts.google.com/specimen/Lato)

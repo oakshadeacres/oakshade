@@ -540,7 +540,7 @@ function renderHeroTab() {
   const hero = site.hero;
   const container = h('div', {});
   container.appendChild(card('Hero text',
-    field('Logo image path', textInput(hero.logoImage, (v) => { hero.logoImage = v; saveSection('hero', hero); }), 'Usually /images/site/logo.jpg — upload replacements below'),
+    field('Logo image path', textInput(hero.logoImage, (v) => { hero.logoImage = v; saveSection('hero', hero); }), 'Usually /images/site/logo.png — upload replacements below'),
     field('Title', textInput(hero.title, (v) => { hero.title = v; saveSection('hero', hero); })),
     field('Tagline', textareaInput(hero.tagline, (v) => { hero.tagline = v; saveSection('hero', hero); }, 2)),
   ));
