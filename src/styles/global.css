@@ -458,7 +458,7 @@ input, select, textarea { font: inherit; color: inherit; }
   background: var(--color-paper-2);
   white-space: nowrap;
 }
-.badge.sage {
+.badge.rose {
   background: var(--color-accent-faint);
   border-color: var(--color-accent-soft);
   color: var(--color-accent-deep);
@@ -712,24 +712,27 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .breed-img-counter {
   position: absolute;
-  bottom: var(--space-3);
-  right: var(--space-3);
-  background: var(--color-ink-overlay);
-  color: var(--color-paper);
+  bottom: 0;
+  right: 0;
+  background: oklch(20% 0.020 50 / 0.5);
+  color: oklch(96% 0.012 85 / 0.92);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
   padding: 4px 10px;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-xs) 0 0 0;
 }
 .breed-arrow {
   position: absolute;
-  top: 50%;
+  top: 78%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-rule-2);
+  width: 32px;
+  height: 32px;
+  background: oklch(96% 0.012 85 / 0.35);
+  border: none;
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -737,7 +740,10 @@ input, select, textarea { font: inherit; color: inherit; }
   transition: background var(--dur-fast) var(--ease-out),
               color var(--dur-fast) var(--ease-out);
 }
-.breed-arrow:hover { background: var(--color-ink); color: var(--color-paper); }
+.breed-arrow:hover {
+  background: oklch(20% 0.020 50 / 0.55);
+  color: var(--color-paper);
+}
 .breed-arrow.prev { left: var(--space-3); }
 .breed-arrow.next { right: var(--space-3); }
 .breed-dots {
@@ -1540,7 +1546,7 @@ html.js .stagger.in-view > *:nth-child(n+6) { opacity: 1; transform: none; trans
 }
 
 @media (max-width: 360px) {
-  .breed-arrow { width: 36px; height: 36px; }
+  .breed-arrow { width: 30px; height: 30px; }
   .breed-arrow.prev { left: 8px; }
   .breed-arrow.next { right: 8px; }
   .hero h1 { font-size: clamp(2.1rem, 9vw, 3rem); }

@@ -551,11 +551,11 @@ function renderHeroTab() {
     (hero.badges || []).forEach((b, i) => {
       badgesWrap.appendChild(h('div', { class: 'trait-row' }, [
         textInput(b.label, (v) => { hero.badges[i].label = v; saveSection('hero', hero); }, 'Badge text'),
-        checkboxInput(b.sage, (v) => { hero.badges[i].sage = v; saveSection('hero', hero); }, 'Sage color'),
+        checkboxInput(b.rose, (v) => { hero.badges[i].rose = v; saveSection('hero', hero); }, 'Rose color'),
         h('button', { class: 'btn btn-sm btn-danger', onclick: () => { hero.badges.splice(i, 1); saveSection('hero', hero); renderBadges(); } }, 'Remove'),
       ]));
     });
-    badgesWrap.appendChild(h('button', { class: 'btn btn-secondary btn-sm', onclick: () => { hero.badges = hero.badges || []; hero.badges.push({ label: '', sage: false }); saveSection('hero', hero); renderBadges(); } }, '+ Add badge'));
+    badgesWrap.appendChild(h('button', { class: 'btn btn-secondary btn-sm', onclick: () => { hero.badges = hero.badges || []; hero.badges.push({ label: '', rose: false }); saveSection('hero', hero); renderBadges(); } }, '+ Add badge'));
   }
   renderBadges();
   container.appendChild(card('Badges', badgesWrap));

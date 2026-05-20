@@ -3,7 +3,7 @@ interface Props {
   logoImage: string;
   title: string;
   tagline: string;
-  badges: { label: string; sage?: boolean }[];
+  badges: { label: string; rose?: boolean }[];
   ctas: { label: string; href: string; primary?: boolean }[];
 }
 const { logoImage, title, tagline, badges, ctas } = Astro.props;
@@ -48,7 +48,7 @@ const titleAfter  = ampIndex === -1 ? '' : title.slice(ampIndex + 1).trimStart()
 
     <div class="hero-badges">
       {badges.map((b) => (
-        <span class={`badge${b.sage ? ' sage' : ''}`}>{b.label}</span>
+        <span class={`badge${b.rose ? ' rose' : ''}`}>{b.label}</span>
       ))}
     </div>
 

@@ -39,19 +39,19 @@
     "badges": [
       {
         "label": "English Orpington ",
-        "sage": false
+        "rose": false
       },
       {
         "label": "Polish",
-        "sage": true
+        "rose": true
       },
       {
         "label": "Bantam Cochins",
-        "sage": false
+        "rose": false
       },
       {
         "label": "Bantam Easter Eggers",
-        "sage": true
+        "rose": true
       }
     ],
     "ctas": [

@@ -1,9 +1,18 @@
 [
   {
+    "date": "2026-05-20",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "near-white / system-sans / warm-terracotta",
+    "vibe": "utilitarian admin · brand-coherent",
+    "enrichment": "none",
+    "brief": "Oakshade Acres · admin tool redesign (CRUD content editor · LAN)"
+  },
+  {
     "date": "2026-05-19",
     "macrostructure": "Almanac",
-    "theme": "Almanac-custom",
-    "theme_axes": "light / roman-italic-serif / chromatic-green",
+    "theme": "Almanac-warm",
+    "theme_axes": "light / roman-italic-serif / warm-terracotta",
     "enrichment": "none",
     "brief": "Oakshade Acres · farm site full redesign (chicks + hatching eggs · Dayton TX)"
   }
