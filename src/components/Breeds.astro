@@ -38,12 +38,12 @@ const initialFallbackName = firstBreed && !firstImage
 ---
 <section id="breeds" class="breeds">
   <div class="breeds-inner">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
     </div>
 
-    <div class="breed-tabs" data-breed-tabs role="tablist">
+    <div class="breed-tabs reveal" data-breed-tabs role="tablist">
       {breedsData.map((b, i) => (
         <button
           class={`breed-tab${i === 0 ? ' active' : ''}`}
@@ -57,7 +57,7 @@ const initialFallbackName = firstBreed && !firstImage
       ))}
     </div>
 
-    <div class="breed-card" data-breed-card>
+    <div class="breed-card reveal" data-breed-card>
       <div class="breed-gallery" data-breed-gallery>
         <div class="breed-img" data-breed-img>
           <img data-breed-img-el src={initialSrc} alt={initialAlt} style={firstImage ? '' : 'display:none'} />

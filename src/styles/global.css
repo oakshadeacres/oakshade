@@ -1455,6 +1455,33 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ============================================
+ * Scroll reveals (subtle)
+ * ============================================ */
+
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  will-change: opacity, transform;
+}
+html.js .reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html.js .stagger > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+}
+html.js .stagger.in-view > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0ms; }
+html.js .stagger.in-view > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 70ms; }
+html.js .stagger.in-view > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 140ms; }
+html.js .stagger.in-view > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 210ms; }
+html.js .stagger.in-view > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 280ms; }
+html.js .stagger.in-view > *:nth-child(n+6) { opacity: 1; transform: none; transition-delay: 340ms; }
+
+/* ============================================
  * Motion (reduced)
  * ============================================ */
 
@@ -1463,6 +1490,11 @@ input, select, textarea { font: inherit; color: inherit; }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  html.js .reveal,
+  html.js .stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

@@ -50,8 +50,12 @@ const jsonLd = {
 };
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
@@ -83,6 +87,28 @@ const jsonLd = {
   </head>
   <body>
     <slot />
+
+    <script>
+      (function scrollReveal() {
+        const targets = document.querySelectorAll<HTMLElement>('.reveal, .stagger');
+        if (!('IntersectionObserver' in window) || targets.length === 0) {
+          targets.forEach((el) => el.classList.add('in-view'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+        );
+        targets.forEach((el) => io.observe(el));
+      })();
+    </script>
 
     <script>
       (function wrapAmpersands() {

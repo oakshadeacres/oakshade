@@ -9,7 +9,7 @@ const { label, title, paragraphs } = Astro.props;
 ---
 <section id="about" class="about">
   <div class="about-grid">
-    <div class="about-side">
+    <div class="about-side reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
       <div class="meta">
@@ -17,7 +17,7 @@ const { label, title, paragraphs } = Astro.props;
         <span>English Orpingtons · Polish · Bantam Cochins · Bantam Easter Eggers</span>
       </div>
     </div>
-    <div class="about-text">
+    <div class="about-text reveal">
       {paragraphs.map((p) => <p>{p}</p>)}
     </div>
   </div>

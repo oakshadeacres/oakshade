@@ -9,11 +9,11 @@ const { label, title, cards } = Astro.props;
 ---
 <section class="pickup">
   <div class="pickup-inner">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
     </div>
-    <div class="pickup-grid">
+    <div class="pickup-grid stagger">
       {cards.map((c) => (
         <div class="pickup-card">
           <div class="ix">{c.icon}</div>

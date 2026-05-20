@@ -13,13 +13,13 @@ const { label, title, sub, springLabel, fallLabel, footerNote, breeds } = Astro.
 ---
 <section id="schedule" class="schedule">
   <div class="schedule-inner">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
       <p class="sub">{sub}</p>
     </div>
 
-    <div class="schedule-table">
+    <div class="schedule-table stagger">
       <div class="schedule-row head" role="row">
         <div>Breed</div>
         <div class="season-spring">{springLabel}</div>

@@ -9,11 +9,11 @@ const { label, title, items } = Astro.props;
 ---
 <section class="testimonials">
   <div class="testimonials-inner">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
     </div>
-    <div class="test-grid">
+    <div class="test-grid stagger">
       {items.map((t) => (
         <div class="test-item">
           <div class="test-stars" aria-label={`${t.stars} out of 5 stars`}>{'★'.repeat(t.stars)}</div>

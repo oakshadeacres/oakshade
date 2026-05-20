@@ -12,11 +12,13 @@ const { label, title, sub, items } = Astro.props;
 ---
 <section id="care" class="care">
   <div class="care-inner">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">{label}</span>
       <h2>{title}</h2>
       <p class="sub">{sub}</p>
     </div>
-    <Accordion items={items} />
+    <div class="reveal">
+      <Accordion items={items} />
+    </div>
   </div>
 </section>
