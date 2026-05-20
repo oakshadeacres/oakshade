@@ -7,18 +7,18 @@ interface Props {
 }
 const { label, title, items } = Astro.props;
 ---
-<section class="section-full testimonials-bg">
-  <div class="section-inner" style="padding: 64px 24px">
-    <p class="section-label reveal">{label}</p>
-    <h2 class="section-title reveal">{title}</h2>
-    <div class="divider reveal"></div>
-    <div class="test-grid stagger">
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="sec-head">
+      <span class="eyebrow">{label}</span>
+      <h2>{title}</h2>
+    </div>
+    <div class="test-grid">
       {items.map((t) => (
-        <div class="test-card">
-          <div class="test-quote">"</div>
-          <p class="test-text">{t.text}</p>
-          <div class="test-stars">{'★'.repeat(t.stars)}</div>
-          <div class="test-name">{t.name}</div>
+        <div class="test-item">
+          <div class="test-stars" aria-label={`${t.stars} out of 5 stars`}>{'★'.repeat(t.stars)}</div>
+          <p class="test-text">“{t.text}”</p>
+          <div class="test-name">— {t.name}</div>
         </div>
       ))}
     </div>

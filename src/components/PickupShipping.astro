@@ -7,16 +7,20 @@ interface Props {
 }
 const { label, title, cards } = Astro.props;
 ---
-<section class="section">
-  <p class="section-label reveal">{label}</p>
-  <h2 class="section-title reveal">{title}</h2>
-  <div class="divider reveal"></div>
-  <div class="info-grid stagger">
-    {cards.map((c) => (
-      <div class="info-card">
-        <h3><span style="font-size:1.4rem">{c.icon}</span> {c.title}</h3>
-        <p>{c.text}</p>
-      </div>
-    ))}
+<section class="pickup">
+  <div class="pickup-inner">
+    <div class="sec-head">
+      <span class="eyebrow">{label}</span>
+      <h2>{title}</h2>
+    </div>
+    <div class="pickup-grid">
+      {cards.map((c) => (
+        <div class="pickup-card">
+          <div class="ix">{c.icon}</div>
+          <h3>{c.title}</h3>
+          <p>{c.text}</p>
+        </div>
+      ))}
+    </div>
   </div>
 </section>

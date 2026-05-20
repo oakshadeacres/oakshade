@@ -7,24 +7,61 @@ interface Props {
 const { logo, links, cta } = Astro.props;
 ---
 <nav class="nav">
-  <div class="nav-logo">{logo}</div>
-  <div class="nav-links">
-    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  <div class="nav-inner">
+    <a class="nav-brand" href="#top">{logo}</a>
+    <div class="nav-links">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </div>
+    <a class="nav-cta" href={cta.href}>{cta.label}</a>
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      data-menu-toggle
+    >
+      <span class="bar"></span>
+    </button>
   </div>
-  <a class="nav-cta" href={cta.href}>{cta.label}</a>
-  <button class="hamburger" aria-label="Open menu" data-menu-toggle>
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 <div class="mobile-menu" data-mobile-menu>
   {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  <a class="mobile-cta" href={cta.href}>{cta.label} →</a>
 </div>
 
 <script>
-  const toggle = document.querySelector('[data-menu-toggle]');
-  const menu = document.querySelector('[data-mobile-menu]');
-  toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
-  menu?.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).tagName === 'A') menu.classList.remove('open');
-  });
+  function initMobileNav() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = document.querySelector<HTMLDivElement>('[data-mobile-menu]');
+    if (!toggle || !menu) return;
+    if (toggle.dataset.bound === '1') return;
+    toggle.dataset.bound = '1';
+
+    const setOpen = (open: boolean) => {
+      toggle.classList.toggle('is-open', open);
+      menu.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      setOpen(!menu.classList.contains('is-open'));
+    });
+
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).tagName === 'A') setOpen(false);
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 880) setOpen(false);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileNav);
+  } else {
+    initMobileNav();
+  }
 </script>

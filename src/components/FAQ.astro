@@ -9,11 +9,12 @@ interface Props {
 }
 const { label, title, items } = Astro.props;
 ---
-<section id="faq" class="section">
-  <p class="section-label reveal">{label}</p>
-  <h2 class="section-title reveal">{title}</h2>
-  <div class="divider reveal"></div>
-  <div class="reveal">
+<section id="faq" class="faq">
+  <div class="faq-inner">
+    <div class="sec-head">
+      <span class="eyebrow">{label}</span>
+      <h2>{title}</h2>
+    </div>
     <Accordion items={items} />
   </div>
 </section>

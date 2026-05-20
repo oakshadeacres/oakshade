@@ -6,9 +6,9 @@ const { items } = Astro.props;
 <div class="accordion" data-accordion>
   {items.map((item, i) => (
     <div class="acc-item">
-      <button class="acc-trigger" type="button" data-acc-trigger={i}>
+      <button class="acc-trigger" type="button" data-acc-trigger={i} aria-expanded="false">
         <h4>{item.q}</h4>
-        <svg class="acc-icon" data-acc-icon={i} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <svg class="acc-icon" data-acc-icon={i} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
@@ -31,10 +31,12 @@ const { items } = Astro.props;
 
         acc.querySelectorAll('[data-acc-body]').forEach((b) => b.classList.remove('open'));
         acc.querySelectorAll('[data-acc-icon]').forEach((i) => i.classList.remove('open'));
+        acc.querySelectorAll('[data-acc-trigger]').forEach((t) => t.setAttribute('aria-expanded', 'false'));
 
         if (!isOpen) {
           body?.classList.add('open');
           icon?.classList.add('open');
+          trigger.setAttribute('aria-expanded', 'true');
         }
       });
     });

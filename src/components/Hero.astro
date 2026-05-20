@@ -9,19 +9,58 @@ interface Props {
 const { logoImage, title, tagline, badges, ctas } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const logoSrc = logoImage.startsWith('http') ? logoImage : `${base}${logoImage}`;
+
+// Split the title once on the ampersand for editorial typesetting.
+// Keeps the surrounding copy untouched.
+const ampIndex = title.indexOf('&');
+const titleBefore = ampIndex === -1 ? title : title.slice(0, ampIndex).trimEnd();
+const titleAfter  = ampIndex === -1 ? '' : title.slice(ampIndex + 1).trimStart();
 ---
-<section class="hero">
-  <img class="hero-logo reveal-scale" src={logoSrc} alt="Oakshade Acres" />
-  <h1 class="reveal" style="transition-delay: 0.1s">{title}</h1>
-  <p class="hero-tagline reveal" style="transition-delay: 0.2s">{tagline}</p>
-  <div class="hero-badges stagger" style="transition-delay: 0.3s">
-    {badges.map((b) => (
-      <span class={`badge${b.sage ? ' sage' : ''}`}>{b.label}</span>
-    ))}
-  </div>
-  <div class="hero-btns reveal" style="transition-delay: 0.4s">
-    {ctas.map((c) => (
-      <a class={c.primary ? 'btn-primary' : 'btn-secondary'} href={c.href}>{c.label}</a>
-    ))}
+<section id="top" class="hero">
+  <div class="hero-inner">
+    <div class="hero-masthead">
+      <span class="left">Oakshade Acres</span>
+      <span class="mid">A Family Farm · Est. Dayton, Texas</span>
+      <span class="right">Vol. 2026</span>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-headline">
+        <h1>
+          {ampIndex === -1
+            ? title
+            : <>
+                {titleBefore}
+                <span class="amp"> &amp; </span>
+                {titleAfter}
+              </>
+          }
+        </h1>
+        <p class="hero-lede">{tagline}</p>
+      </div>
+      <div class="hero-aside">
+        <figure class="hero-mark">
+          <img src={logoSrc} alt="Oakshade Acres mark" loading="eager" />
+          <figcaption class="marknote">Small flock · Big heart</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="hero-badges">
+      {badges.map((b) => (
+        <span class={`badge${b.sage ? ' sage' : ''}`}>{b.label}</span>
+      ))}
+    </div>
+
+    <div class="hero-foot">
+      <div class="hero-ctas">
+        {ctas.map((c) => (
+          <a class={`btn ${c.primary ? 'btn-primary' : 'btn-ghost'}`} href={c.href}>
+            {c.label}
+          </a>
+        ))}
+      </div>
+      <span class="foot-note">Pickup in Dayton, TX · Hatching eggs ship USPS</span>
+    </div>
   </div>
 </section>

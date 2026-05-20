@@ -22,7 +22,6 @@ const pathWithSlash = path === '/' ? '/' : (path.startsWith('/') ? path : `/${pa
 const canonical = `${siteOrigin}${base}${pathWithSlash}`;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteOrigin}${base}${ogImage}`;
 
-// Pull contact details from site.json so JSON-LD stays in sync with the admin
 const phoneHref = site.footer.getInTouch.items.find((i) => i.href.startsWith('tel:'))?.href ?? '';
 const phone = phoneHref.replace('tel:', '') || '+19363671974';
 const email = site.contact.email;
@@ -51,7 +50,7 @@ const jsonLd = {
 };
 ---
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -76,35 +75,58 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
-    <script is:inline>
-      document.documentElement.classList.remove('no-js');
-      document.documentElement.classList.add('js');
-    </script>
   </head>
   <body>
     <slot />
 
     <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
+      (function wrapAmpersands() {
+        const run = () => {
+          const heads = document.querySelectorAll(
+            'h1, h2, h3, h4, h5, h6, .schedule-cell-breed, .test-text, .footer-statement, .nav-brand, .order-num'
+          );
+          heads.forEach((h) => {
+            const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+            const nodes: Text[] = [];
+            let n: Node | null;
+            while ((n = walker.nextNode())) {
+              const t = n as Text;
+              if (
+                t.nodeValue &&
+                t.nodeValue.includes('&') &&
+                !(t.parentElement && t.parentElement.classList.contains('amp'))
+              ) {
+                nodes.push(t);
+              }
             }
+            nodes.forEach((node) => {
+              const parts = (node.nodeValue || '').split(/(&)/);
+              const frag = document.createDocumentFragment();
+              parts.forEach((p) => {
+                if (p === '&') {
+                  const s = document.createElement('span');
+                  s.className = 'amp';
+                  s.textContent = '&';
+                  frag.appendChild(s);
+                } else if (p) {
+                  frag.appendChild(document.createTextNode(p));
+                }
+              });
+              node.parentNode?.replaceChild(frag, node);
+            });
           });
-        },
-        { threshold: 0.12 },
-      );
-      document
-        .querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger')
-        .forEach((el) => observer.observe(el));
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', run);
+        } else {
+          run();
+        }
+      })();
     </script>
   </body>
 </html>

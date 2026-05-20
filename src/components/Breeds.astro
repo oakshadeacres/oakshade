@@ -36,45 +36,52 @@ const initialFallbackName = firstBreed && !firstImage
   ? `${firstBreed.varieties[0] ?? ''} ${firstBreed.name}`.trim()
   : '';
 ---
-<section id="breeds" class="section-full breeds-bg">
-  <div class="section-inner">
-    <p class="section-label reveal">{label}</p>
-    <h2 class="section-title reveal">{title}</h2>
-    <div class="divider reveal"></div>
+<section id="breeds" class="breeds">
+  <div class="breeds-inner">
+    <div class="sec-head">
+      <span class="eyebrow">{label}</span>
+      <h2>{title}</h2>
+    </div>
 
-    <div class="breed-tabs stagger" data-breed-tabs>
+    <div class="breed-tabs" data-breed-tabs role="tablist">
       {breedsData.map((b, i) => (
         <button
           class={`breed-tab${i === 0 ? ' active' : ''}`}
           data-breed-tab={b.id}
           type="button"
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
         >
-          {b.name} {b.specialty && <span>★</span>}
+          {b.name}{b.specialty && <span class="star">★</span>}
         </button>
       ))}
     </div>
 
-    <div class="breed-card reveal" data-breed-card>
+    <div class="breed-card" data-breed-card>
       <div class="breed-gallery" data-breed-gallery>
         <div class="breed-img" data-breed-img>
           <img data-breed-img-el src={initialSrc} alt={initialAlt} style={firstImage ? '' : 'display:none'} />
-          <div data-breed-img-label-fallback style={`display:${firstImage ? 'none' : 'flex'}; flex-direction:column; align-items:center; justify-content:center; gap:10px;`}>
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-              <ellipse cx="18" cy="22" rx="12" ry="9" stroke="#7a9e6e" stroke-width="1.8"/>
-              <circle cx="18" cy="11" r="6" stroke="#7a9e6e" stroke-width="1.8"/>
-              <path d="M24 8l4-2M12 8l-4-2" stroke="#7a9e6e" stroke-width="1.8" stroke-linecap="round"/>
+          <div data-breed-img-label-fallback class="breed-img-fallback" style={`display:${firstImage ? 'none' : 'flex'}`}>
+            <svg width="44" height="44" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4">
+              <ellipse cx="18" cy="22" rx="12" ry="9"/>
+              <circle cx="18" cy="11" r="6"/>
+              <path d="M24 8l4-2M12 8l-4-2" stroke-linecap="round"/>
             </svg>
-            <span data-breed-img-name style="line-height:1.5">{initialFallbackName}</span>
+            <span data-breed-img-name>{initialFallbackName}</span>
           </div>
-          <div class="breed-img-label" data-breed-img-counter></div>
+          <div class="breed-img-counter" data-breed-img-counter></div>
         </div>
-        <button class="breed-gallery-arrow prev" data-breed-prev aria-label="Previous" type="button">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="breed-arrow prev" data-breed-prev aria-label="Previous image" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2L4 7l5 5"/>
+          </svg>
         </button>
-        <button class="breed-gallery-arrow next" data-breed-next aria-label="Next" type="button">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="breed-arrow next" data-breed-next aria-label="Next image" type="button">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 2l5 5-5 5"/>
+          </svg>
         </button>
-        <div class="breed-gallery-dots" data-breed-dots></div>
+        <div class="breed-dots" data-breed-dots></div>
       </div>
 
       <div class="breed-info">
@@ -141,7 +148,7 @@ const initialFallbackName = firstBreed && !firstImage
       if (total > 1) {
         for (let i = 0; i < total; i++) {
           const d = document.createElement('button');
-          d.className = `breed-gallery-dot${i === slide ? ' active' : ''}`;
+          d.className = `breed-dot${i === slide ? ' active' : ''}`;
           d.type = 'button';
           d.setAttribute('aria-label', `Go to slide ${i + 1}`);
           d.addEventListener('click', () => { slide = i; renderGallery(); renderVarietyPills(); });
@@ -181,7 +188,7 @@ const initialFallbackName = firstBreed && !firstImage
 
     function renderAll() {
       const b = current();
-      specialtyEl.style.display = b.specialty ? 'inline-block' : 'none';
+      specialtyEl.style.display = b.specialty ? 'inline-flex' : 'none';
       nameEl.textContent = b.name;
       descEl.textContent = b.description;
       traitsEl.innerHTML = '';
@@ -204,8 +211,9 @@ const initialFallbackName = firstBreed && !firstImage
 
     tabs.forEach((t) => {
       t.addEventListener('click', () => {
-        tabs.forEach((x) => x.classList.remove('active'));
+        tabs.forEach((x) => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); });
         t.classList.add('active');
+        t.setAttribute('aria-selected', 'true');
         activeId = t.getAttribute('data-breed-tab');
         slide = 0;
         renderAll();
@@ -231,7 +239,6 @@ const initialFallbackName = firstBreed && !firstImage
       renderVarietyPills();
     });
 
-    // Touch swipe
     const gallery = document.querySelector('[data-breed-gallery]');
     let startX = null;
     gallery.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
