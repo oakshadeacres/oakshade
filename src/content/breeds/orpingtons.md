@@ -1,5 +1,5 @@
 ---
-name: English Orpington...
+name: English Orpingtons
 specialty: true
 order: 1
 description: >-

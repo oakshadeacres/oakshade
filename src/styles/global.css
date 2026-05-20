@@ -1,5 +1,5 @@
 /* Hallmark · macrostructure: Almanac · genre: editorial
- * theme: Almanac-custom · paper oklch(96% .012 85) warm-cream · accent oklch(40% .085 145) forest-green
+ * theme: Almanac-warm · paper oklch(96% .012 85) warm-cream · accent oklch(46% .105 32) terracotta
  * display: Fraunces (roman-italic serif) · body: Inter Tight · data: JetBrains Mono
  * nav: hairline ledger · footer: Statement
  * pre-emit critique: P5 H5 E5 S4 R5 V5
@@ -13,10 +13,10 @@
   --color-ink: oklch(20% 0.020 50);
   --color-ink-2: oklch(38% 0.022 55);
   --color-ink-3: oklch(54% 0.018 60);
-  --color-accent: oklch(40% 0.085 145);
-  --color-accent-deep: oklch(28% 0.07 145);
-  --color-accent-soft: oklch(70% 0.075 145);
-  --color-accent-faint: oklch(86% 0.045 145);
+  --color-accent: oklch(46% 0.105 32);
+  --color-accent-deep: oklch(32% 0.09 30);
+  --color-accent-soft: oklch(72% 0.075 35);
+  --color-accent-faint: oklch(86% 0.045 38);
   --color-accent-2: oklch(58% 0.13 50);
   --color-rule: oklch(86% 0.018 75);
   --color-rule-2: oklch(76% 0.022 70);
@@ -510,10 +510,10 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .btn:active { transform: translateY(1px); }
 .btn-primary {
-  background: var(--color-ink);
+  background: var(--color-accent);
   color: var(--color-paper);
 }
-.btn-primary:hover { background: var(--color-accent); }
+.btn-primary:hover { background: var(--color-accent-deep); }
 .btn-ghost {
   background: transparent;
   color: var(--color-ink);
@@ -657,12 +657,24 @@ input, select, textarea { font: inherit; color: inherit; }
 .breed-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-7);
+  grid-template-areas:
+    "gallery"
+    "varieties"
+    "info";
+  gap: var(--space-6);
 }
+.breed-gallery   { grid-area: gallery; }
+.breed-varieties { grid-area: varieties; }
+.breed-info      { grid-area: info; }
+
 @media (min-width: 880px) {
   .breed-card {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: var(--space-8);
+    grid-template-areas:
+      "gallery info"
+      "gallery varieties";
+    column-gap: var(--space-8);
+    row-gap: var(--space-5);
     align-items: start;
   }
 }
@@ -799,7 +811,7 @@ input, select, textarea { font: inherit; color: inherit; }
   color: var(--color-ink);
   line-height: 1.4;
 }
-.breed-varieties { margin-top: var(--space-3); }
+.breed-varieties { margin-top: 0; }
 .breed-varieties h4 {
   font-family: var(--font-mono);
   font-style: normal;
@@ -832,9 +844,9 @@ input, select, textarea { font: inherit; color: inherit; }
   color: var(--color-ink);
 }
 .variety-pill.active {
-  background: var(--color-ink);
-  color: var(--color-paper);
-  border-color: var(--color-ink);
+  background: var(--color-accent-faint);
+  color: var(--color-accent-deep);
+  border-color: var(--color-accent-soft);
 }
 .variety-pill-empty { opacity: 0.45; cursor: default; }
 
