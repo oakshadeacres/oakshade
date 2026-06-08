@@ -20,14 +20,23 @@ traits:
     val: Dual Purpose
 varieties:
   - name: Gold Laced
+    price: $20
   - name: Silver Laced
+    price: $20
   - name: Chocolate Laced
+    price: $20
   - name: Lavender/Black Split To Lavender
+    price: $15
   - name: Blue/Black/Splash
+    price: $15
   - name: Lavender/Black Mottled
+    price: $15
   - name: 'Chocolate/Mauve/Splash '
+    price: $15
   - name: Buff
+    price: $15
   - name: Jubilee
+    price: $15
 images:
   - url: /images/breeds/orpingtons/1776967573621-chocolaced.webp
     variety: Chocolate Laced

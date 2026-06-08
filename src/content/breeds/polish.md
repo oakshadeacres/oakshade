@@ -19,8 +19,11 @@ traits:
     val: 'Ornamental, Pets'
 varieties:
   - name: Tolbunt
+    price: $18
   - name: White Crested Blue
+    price: $20
   - name: White Crested Chocolate
+    price: $25
 images:
   - url: /images/breeds/polish/01-polish-group.jpg
     variety: Tolbunt

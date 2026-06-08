@@ -19,6 +19,7 @@ traits:
     val: 'Ornamental,Pets'
 varieties:
   - name: Assorted Colors
+    price: $5
 images: []
 available:
   - Easter Eggers
