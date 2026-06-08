@@ -2,6 +2,7 @@
 const TABS = [
   { id: 'breeds', label: 'Breeds' },
   { id: 'schedule', label: 'Schedule' },
+  { id: 'disclaimer', label: 'Disclaimer' },
   { id: 'hero', label: 'Hero' },
   { id: 'about', label: 'About' },
   { id: 'order', label: 'Order' },
@@ -102,6 +103,7 @@ function renderPanel() {
   switch (activeTab) {
     case 'breeds': return renderBreedsTab();
     case 'schedule': return renderScheduleTab();
+    case 'disclaimer': return renderDisclaimerTab();
     case 'hero': return renderHeroTab();
     case 'about': return renderAboutTab();
     case 'order': return renderOrderTab();
@@ -253,6 +255,33 @@ function applyVarietyChangeToImages(breed, prev, next) {
   }
 }
 
+function varietyPriceEditor(breed) {
+  const wrap = h('div', { class: 'variety-editor' });
+  breed.varieties = breed.varieties || [];
+  let prevNames = breed.varieties.map((v) => v.name);
+  function commit() {
+    const nextNames = breed.varieties.map((v) => v.name);
+    applyVarietyChangeToImages(breed, prevNames, nextNames);
+    prevNames = nextNames.slice();
+    saveBreed(breed.id, breed);
+  }
+  function render() {
+    wrap.innerHTML = '';
+    breed.varieties.forEach((v, i) => {
+      wrap.appendChild(h('div', { class: 'variety-row' }, [
+        h('input', { type: 'text', class: 'variety-name', value: v.name || '', placeholder: 'Variety name',
+          onchange: (e) => { breed.varieties[i].name = e.target.value; commit(); } }),
+        h('input', { type: 'text', class: 'variety-price', value: v.price || '', placeholder: 'Price (e.g. $25)',
+          onchange: (e) => { const p = e.target.value.trim(); if (p) breed.varieties[i].price = p; else delete breed.varieties[i].price; commit(); } }),
+        h('button', { type: 'button', class: 'btn btn-sm btn-danger', onclick: () => { breed.varieties.splice(i, 1); commit(); render(); } }, 'Remove'),
+      ]));
+    });
+    wrap.appendChild(h('button', { type: 'button', class: 'btn btn-secondary btn-sm', onclick: () => { breed.varieties.push({ name: '' }); render(); } }, '+ Add variety'));
+  }
+  render();
+  return wrap;
+}
+
 // ===== Tab: Breeds =====
 function renderBreedsTab() {
   const container = h('div', { class: 'panel' });
@@ -316,30 +345,29 @@ function renderBreedEditor(breed) {
   renderTraits();
   wrap.appendChild(card('Traits', traitsWrap));
 
-  let prevVarieties = (breed.varieties || []).slice();
-  wrap.appendChild(card('Varieties',
-    h('p', { class: 'hint' }, 'Add a pill for each color/variety you carry. Shown under the breed description. Renaming or deleting a variety will update any photos tagged with it.'),
-    chipListEditor(breed.varieties || [], (next) => {
-      applyVarietyChangeToImages(breed, prevVarieties, next);
-      breed.varieties = next;
-      prevVarieties = next.slice();
-      saveBreed(breed.id, breed);
-    })
+  wrap.appendChild(card('Varieties & pricing',
+    h('p', { class: 'hint' }, 'Add a row for each color/variety you carry, with an optional price per chick (free text — e.g. "$25" or "Starting at $20"). Renaming a variety updates any photos tagged with it.'),
+    varietyPriceEditor(breed)
   ));
 
-  wrap.appendChild(card(`Availability (${site?.schedule?.springLabel || 'Spring'})`,
-    h('p', { class: 'hint' }, 'What varieties of this breed are available this spring.'),
-    chipListEditor(breed.spring || [], (v) => { breed.spring = v; saveBreed(breed.id, breed); })
+  wrap.appendChild(card(`Available (${site?.schedule?.availableLabel || 'Available'})`,
+    h('p', { class: 'hint' }, 'Varieties of this breed currently available.'),
+    chipListEditor(breed.available || [], (v) => { breed.available = v; saveBreed(breed.id, breed); })
   ));
 
-  wrap.appendChild(card(`Availability (${site?.schedule?.fallLabel || 'Fall'})`,
-    h('p', { class: 'hint' }, 'What varieties of this breed are available this fall.'),
-    chipListEditor(breed.fall || [], (v) => { breed.fall = v; saveBreed(breed.id, breed); })
+  wrap.appendChild(card(`Waitlist (${site?.schedule?.waitlistLabel || 'Waitlist'})`,
+    h('p', { class: 'hint' }, 'Varieties you are taking waitlist sign-ups for.'),
+    chipListEditor(breed.waitlist || [], (v) => { breed.waitlist = v; saveBreed(breed.id, breed); })
+  ));
+
+  wrap.appendChild(card(`Unavailable (${site?.schedule?.unavailableLabel || 'Unavailable'})`,
+    h('p', { class: 'hint' }, 'Varieties not currently available.'),
+    chipListEditor(breed.unavailable || [], (v) => { breed.unavailable = v; saveBreed(breed.id, breed); })
   ));
 
   wrap.appendChild(card('Gallery images',
     h('p', { class: 'hint' }, 'Tag each photo with a variety so the matching pill highlights when visitors click through the gallery.'),
-    renderImageManager('breeds/' + breed.id, breed.images || [], breed.varieties || [], (imgs) => { breed.images = imgs; saveBreed(breed.id, breed); })
+    renderImageManager('breeds/' + breed.id, breed.images || [], (breed.varieties || []).map((v) => v.name), (imgs) => { breed.images = imgs; saveBreed(breed.id, breed); })
   ));
 
   return wrap;
@@ -512,25 +540,42 @@ function renderScheduleTab() {
     field('Section label', textInput(s.label, (v) => { s.label = v; saveSection('schedule', s); })),
     field('Section title', textInput(s.title, (v) => { s.title = v; saveSection('schedule', s); })),
     field('Subtitle / intro', textareaInput(s.sub, (v) => { s.sub = v; saveSection('schedule', s); }, 2)),
-    field('Spring season label', textInput(s.springLabel, (v) => { s.springLabel = v; saveSection('schedule', s); })),
-    field('Fall season label', textInput(s.fallLabel, (v) => { s.fallLabel = v; saveSection('schedule', s); })),
+    field('Available label', textInput(s.availableLabel, (v) => { s.availableLabel = v; saveSection('schedule', s); })),
+    field('Waitlist label', textInput(s.waitlistLabel, (v) => { s.waitlistLabel = v; saveSection('schedule', s); })),
+    field('Unavailable label', textInput(s.unavailableLabel, (v) => { s.unavailableLabel = v; saveSection('schedule', s); })),
     field('Footer note', textareaInput(s.footerNote, (v) => { s.footerNote = v; saveSection('schedule', s); }, 2)),
   ));
-  container.appendChild(card('What\'s available each season',
-    h('p', { class: 'hint' }, 'Edit per-breed availability on the Breeds tab — each breed has its own Spring and Fall lists.'),
+  container.appendChild(card('What\'s available',
+    h('p', { class: 'hint' }, 'Edit per-breed availability on the Breeds tab — each breed has Available, Waitlist, and Unavailable lists.'),
     h('div', { class: 'schedule-matrix' }, breeds.map(b =>
       h('div', { class: 'schedule-matrix-row' }, [
         h('div', { class: 'schedule-matrix-breed' }, b.name),
         h('div', { class: 'schedule-matrix-col' }, [
-          h('strong', {}, s.springLabel),
-          (b.spring || []).length ? h('ul', {}, (b.spring || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+          h('strong', {}, s.availableLabel),
+          (b.available || []).length ? h('ul', {}, (b.available || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
         ]),
         h('div', { class: 'schedule-matrix-col' }, [
-          h('strong', {}, s.fallLabel),
-          (b.fall || []).length ? h('ul', {}, (b.fall || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+          h('strong', {}, s.waitlistLabel),
+          (b.waitlist || []).length ? h('ul', {}, (b.waitlist || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+        ]),
+        h('div', { class: 'schedule-matrix-col' }, [
+          h('strong', {}, s.unavailableLabel),
+          (b.unavailable || []).length ? h('ul', {}, (b.unavailable || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
         ]),
       ])
     )),
+  ));
+  tabPanel.appendChild(container);
+}
+
+// ===== Tab: Disclaimer =====
+function renderDisclaimerTab() {
+  const d = site.disclaimer || (site.disclaimer = { enabled: true, heading: '', body: '' });
+  const container = h('div', {});
+  container.appendChild(card('Hatching-eggs disclaimer',
+    field('Show on site', checkboxInput(d.enabled, (v) => { d.enabled = v; saveSection('disclaimer', d); }, 'Display this callout above the "How to Preorder" section')),
+    field('Heading', textInput(d.heading, (v) => { d.heading = v; saveSection('disclaimer', d); })),
+    field('Body', textareaInput(d.body, (v) => { d.body = v; saveSection('disclaimer', d); }, 5), 'Use Enter for line breaks.'),
   ));
   tabPanel.appendChild(container);
 }

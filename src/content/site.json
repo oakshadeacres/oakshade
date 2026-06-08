@@ -83,11 +83,17 @@
   },
   "schedule": {
     "label": "What's Available",
-    "title": "Hatch Schedule & Availability",
-    "sub": "Our hatch schedule is updated regularly. Reach out on Facebook to claim your spot — popular breeds go fast!",
-    "springLabel": "🌱 Spring 2026",
-    "fallLabel": "🍂 Fall 2026",
+    "title": "Current Availability",
+    "sub": "Our availability is updated regularly. Reach out on Facebook to claim your spot — popular breeds go fast!",
+    "availableLabel": "✅ Available",
+    "waitlistLabel": "⏳ Waitlist",
+    "unavailableLabel": "Unavailable",
     "footerNote": "✉️ Reach out on Facebook or use the contact form to reserve your spot — popular varieties go fast!"
+  },
+  "disclaimer": {
+    "enabled": true,
+    "heading": "About Hatching Eggs",
+    "body": "Hatching eggs are sold as-is — hatch rates depend on your incubator, handling, and shipping, and can never be guaranteed. Eggs are fragile and shipping carries inherent risk. Please reach out with any questions before ordering."
   },
   "order": {
     "label": "How It Works",

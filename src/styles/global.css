@@ -22,6 +22,9 @@
   --color-rule-2: oklch(76% 0.022 70);
   --color-focus: oklch(58% 0.13 50);
   --color-warn: oklch(48% 0.18 28);
+  --color-available: oklch(52% 0.12 145);
+  --color-waitlist: oklch(62% 0.13 70);
+  --color-unavailable: oklch(54% 0.018 60);
   --color-ink-overlay: oklch(20% 0.020 50 / 0.7);
   --color-ink-border: oklch(35% 0.022 55);
   --color-ink-text-1: oklch(82% 0.018 75);
@@ -856,6 +859,35 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .variety-pill-empty { opacity: 0.45; cursor: default; }
 
+.breed-price {
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.breed-price-caption {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-ink-3);
+}
+.breed-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.breed-price-variety {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+}
+.breed-price-amount {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--color-accent);
+}
+
 @media (max-width: 480px) {
   .breed-traits { grid-template-columns: 1fr; }
   .trait:nth-child(odd) { border-right: none; padding-right: 0; }
@@ -881,7 +913,7 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .schedule-row {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 4fr);
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 3fr);
   border-bottom: 1px solid var(--color-rule);
 }
 .schedule-row.head {
@@ -896,8 +928,12 @@ input, select, textarea { font: inherit; color: inherit; }
   color: var(--color-ink-2);
   padding: 0 var(--space-4) 0 0;
 }
-.schedule-row.head .season-spring { color: var(--color-accent); padding-left: var(--space-4); border-left: 1px solid var(--color-rule); }
-.schedule-row.head .season-fall   { color: var(--color-accent-2); padding-left: var(--space-4); border-left: 1px solid var(--color-rule); }
+.schedule-row.head .status-available,
+.schedule-row.head .status-waitlist,
+.schedule-row.head .status-unavailable { padding-left: var(--space-4); border-left: 1px solid var(--color-rule); }
+.schedule-row.head .status-available { color: var(--color-available); }
+.schedule-row.head .status-waitlist { color: var(--color-waitlist); }
+.schedule-row.head .status-unavailable { color: var(--color-unavailable); }
 
 .schedule-cell { padding: var(--space-5) var(--space-4) var(--space-5) 0; }
 .schedule-cell-breed {
@@ -907,7 +943,7 @@ input, select, textarea { font: inherit; color: inherit; }
   color: var(--color-ink);
   line-height: 1.2;
 }
-.schedule-cell-season {
+.schedule-cell-status {
   padding-left: var(--space-4);
   border-left: 1px solid var(--color-rule);
 }
@@ -931,8 +967,9 @@ input, select, textarea { font: inherit; color: inherit; }
   flex-shrink: 0;
   transform: translateY(2px);
 }
-.schedule-marker.spring { background: var(--color-accent); }
-.schedule-marker.fall { background: var(--color-accent-2); }
+.schedule-marker.available { background: var(--color-available); }
+.schedule-marker.waitlist { background: var(--color-waitlist); }
+.schedule-marker.unavailable { background: var(--color-unavailable); }
 .schedule-empty {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -940,7 +977,7 @@ input, select, textarea { font: inherit; color: inherit; }
   letter-spacing: 0.14em;
   color: var(--color-ink-3);
 }
-.schedule-season-tag {
+.schedule-status-tag {
   display: none;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -948,8 +985,9 @@ input, select, textarea { font: inherit; color: inherit; }
   letter-spacing: 0.14em;
   margin-bottom: var(--space-3);
 }
-.schedule-season-tag.spring { color: var(--color-accent); }
-.schedule-season-tag.fall { color: var(--color-accent-2); }
+.schedule-status-tag.available { color: var(--color-available); }
+.schedule-status-tag.waitlist { color: var(--color-waitlist); }
+.schedule-status-tag.unavailable { color: var(--color-unavailable); }
 .schedule-footnote {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -965,7 +1003,7 @@ input, select, textarea { font: inherit; color: inherit; }
   .schedule-row { grid-template-columns: 1fr; padding: var(--space-4) 0; }
   .schedule-row.head { display: none; }
   .schedule-cell { padding: 0 0 var(--space-3) 0; }
-  .schedule-cell-season {
+  .schedule-cell-status {
     padding-left: 0;
     border-left: none;
     padding-top: var(--space-3);
@@ -976,7 +1014,43 @@ input, select, textarea { font: inherit; color: inherit; }
     border-bottom: 1px solid var(--color-rule);
     margin-bottom: var(--space-2);
   }
-  .schedule-season-tag { display: block; }
+  .schedule-status-tag { display: block; }
+}
+
+/* ============================================
+ * Disclaimer callout
+ * ============================================ */
+
+.disclaimer {
+  padding: var(--space-7) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.disclaimer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+.disclaimer-card {
+  border: 1px solid var(--color-accent-soft);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-faint);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5) var(--space-6);
+}
+.disclaimer-heading {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-accent-deep);
+  margin-bottom: var(--space-3);
+}
+.disclaimer-body {
+  color: var(--color-ink-2);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  white-space: pre-line;
+  max-width: 70ch;
 }
 
 /* ============================================

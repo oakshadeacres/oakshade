@@ -1067,3 +1067,13 @@ input, textarea, select { font: inherit; color: inherit; }
   .crop-stage { height: auto; flex: 1 1 auto; }
   .crop-toolbar .crop-next { margin-left: 0; flex: 1 1 100%; order: 99; }
 }
+
+.variety-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.variety-row .variety-name { flex: 2 1 0; }
+.variety-row .variety-price { flex: 1 1 0; }
+.variety-editor > .btn { margin-top: 0.25rem; }

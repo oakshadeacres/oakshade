@@ -7,7 +7,7 @@ interface Breed {
   specialty: boolean;
   description: string;
   traits: Trait[];
-  varieties: string[];
+  varieties: { name: string; price?: string }[];
   images: BreedImage[];
 }
 interface Props {
@@ -33,7 +33,7 @@ const initialAlt = firstImage
   ? (firstImage.variety ? `${firstImage.variety} ${firstBreed.name}` : firstBreed.name)
   : '';
 const initialFallbackName = firstBreed && !firstImage
-  ? `${firstBreed.varieties[0] ?? ''} ${firstBreed.name}`.trim()
+  ? `${firstBreed.varieties[0]?.name ?? ''} ${firstBreed.name}`.trim()
   : '';
 ---
 <section id="breeds" class="breeds">
@@ -92,6 +92,13 @@ const initialFallbackName = firstBreed && !firstImage
       <div class="breed-info">
         <span class="breed-specialty" data-breed-specialty style="display:none">★ Our Specialty</span>
         <h3 data-breed-name></h3>
+        <div class="breed-price" data-breed-price style="display:none">
+          <span class="breed-price-caption">Price per chick</span>
+          <span class="breed-price-row">
+            <span class="breed-price-variety" data-breed-price-variety></span>
+            <span class="breed-price-amount" data-breed-price-amount></span>
+          </span>
+        </div>
         <p class="breed-desc" data-breed-desc></p>
         <div class="breed-traits" data-breed-traits></div>
       </div>
@@ -112,6 +119,9 @@ const initialFallbackName = firstBreed && !firstImage
     const imgNameEl = document.querySelector('[data-breed-img-name]');
     const counterEl = document.querySelector('[data-breed-img-counter]');
     const dotsEl = document.querySelector('[data-breed-dots]');
+    const priceEl = document.querySelector('[data-breed-price]');
+    const priceVarietyEl = document.querySelector('[data-breed-price-variety]');
+    const priceAmountEl = document.querySelector('[data-breed-price-amount]');
     const prevBtn = document.querySelector('[data-breed-prev]');
     const nextBtn = document.querySelector('[data-breed-next]');
 
@@ -137,7 +147,7 @@ const initialFallbackName = firstBreed && !firstImage
       } else {
         imgEl.style.display = 'none';
         imgFallback.style.display = 'flex';
-        const label = b.varieties.length ? b.varieties[slide] : b.name;
+        const label = b.varieties.length ? (b.varieties[slide]?.name ?? b.name) : b.name;
         imgNameEl.textContent = `${label} ${b.name}`.trim();
       }
       counterEl.textContent = total > 1 ? `${slide + 1} / ${total}` : '';
@@ -156,22 +166,37 @@ const initialFallbackName = firstBreed && !firstImage
           dotsEl.appendChild(d);
         }
       }
+      renderPrice();
+    }
+
+    function renderPrice() {
+      const b = current();
+      const hasImage = b.images.length > 0;
+      const currentName = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide]?.name || null);
+      const match = currentName ? b.varieties.find((v) => v.name === currentName) : null;
+      if (match && match.price) {
+        priceVarietyEl.textContent = match.name;
+        priceAmountEl.textContent = match.price;
+        priceEl.style.display = 'flex';
+      } else {
+        priceEl.style.display = 'none';
+      }
     }
 
     function renderVarietyPills() {
       const b = current();
       const hasImage = b.images.length > 0;
-      const currentVariety = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide] || null);
+      const currentVariety = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide]?.name || null);
       varietiesEl.innerHTML = '';
       b.varieties.forEach((v, i) => {
         const pill = document.createElement('button');
         pill.type = 'button';
-        pill.textContent = v;
+        pill.textContent = v.name;
 
         if (hasImage) {
-          const firstMatch = b.images.findIndex((im) => im.variety === v);
+          const firstMatch = b.images.findIndex((im) => im.variety === v.name);
           const isEmpty = firstMatch === -1;
-          const isActive = currentVariety === v;
+          const isActive = currentVariety === v.name;
           pill.className = `variety-pill${isActive ? ' active' : ''}${isEmpty ? ' variety-pill-empty' : ''}`;
           if (isEmpty) {
             pill.setAttribute('aria-disabled', 'true');

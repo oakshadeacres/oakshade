@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Breeds from '../components/Breeds.astro';
 import Schedule from '../components/Schedule.astro';
+import Disclaimer from '../components/Disclaimer.astro';
 import Order from '../components/Order.astro';
 import ContactSection from '../components/ContactSection.astro';
 import PickupShipping from '../components/PickupShipping.astro';
@@ -22,14 +23,15 @@ const breeds = breedEntries
 
 const scheduleBreeds = breeds.map((b) => ({
   name: b.name,
-  spring: b.spring,
-  fall: b.fall,
+  available: b.available,
+  waitlist: b.waitlist,
+  unavailable: b.unavailable,
 }));
 
 const breedOptions: string[] = [];
 breeds.forEach((b) => {
   if (b.varieties.length) {
-    b.varieties.forEach((v) => breedOptions.push(`${b.name} – ${v}`));
+    b.varieties.forEach((v) => breedOptions.push(`${b.name} – ${v.name}`));
   } else {
     breedOptions.push(b.name);
   }
@@ -60,10 +62,16 @@ breedOptions.push('Multiple Breeds');
     label={site.schedule.label}
     title={site.schedule.title}
     sub={site.schedule.sub}
-    springLabel={site.schedule.springLabel}
-    fallLabel={site.schedule.fallLabel}
+    availableLabel={site.schedule.availableLabel}
+    waitlistLabel={site.schedule.waitlistLabel}
+    unavailableLabel={site.schedule.unavailableLabel}
     footerNote={site.schedule.footerNote}
     breeds={scheduleBreeds}
+  />
+  <Disclaimer
+    enabled={site.disclaimer.enabled}
+    heading={site.disclaimer.heading}
+    body={site.disclaimer.body}
   />
   <Order
     label={site.order.label}

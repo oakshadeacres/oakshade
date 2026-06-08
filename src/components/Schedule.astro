@@ -1,15 +1,22 @@
 ---
-interface Breed { name: string; spring: string[]; fall: string[] }
+interface Breed { name: string; available: string[]; waitlist: string[]; unavailable: string[] }
 interface Props {
   label: string;
   title: string;
   sub: string;
-  springLabel: string;
-  fallLabel: string;
+  availableLabel: string;
+  waitlistLabel: string;
+  unavailableLabel: string;
   footerNote: string;
   breeds: Breed[];
 }
-const { label, title, sub, springLabel, fallLabel, footerNote, breeds } = Astro.props;
+const { label, title, sub, availableLabel, waitlistLabel, unavailableLabel, footerNote, breeds } = Astro.props;
+
+const columns = [
+  { key: 'available', label: availableLabel, cls: 'available' },
+  { key: 'waitlist', label: waitlistLabel, cls: 'waitlist' },
+  { key: 'unavailable', label: unavailableLabel, cls: 'unavailable' },
+] as const;
 ---
 <section id="schedule" class="schedule">
   <div class="schedule-inner">
@@ -22,36 +29,27 @@ const { label, title, sub, springLabel, fallLabel, footerNote, breeds } = Astro.
     <div class="schedule-table stagger">
       <div class="schedule-row head" role="row">
         <div>Breed</div>
-        <div class="season-spring">{springLabel}</div>
-        <div class="season-fall">{fallLabel}</div>
+        {columns.map((c) => (
+          <div class={`status-${c.cls}`}>{c.label}</div>
+        ))}
       </div>
       {breeds.map((b) => (
         <div class="schedule-row">
           <div class="schedule-cell schedule-cell-breed">{b.name}</div>
-          <div class="schedule-cell schedule-cell-season">
-            <div class="schedule-season-tag spring">{springLabel}</div>
-            {b.spring.length === 0 ? (
-              <span class="schedule-empty">Not available this season</span>
-            ) : (
-              <ul class="schedule-list">
-                {b.spring.map((v) => (
-                  <li><span class="schedule-marker spring"></span>{v}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div class="schedule-cell schedule-cell-season">
-            <div class="schedule-season-tag fall">{fallLabel}</div>
-            {b.fall.length === 0 ? (
-              <span class="schedule-empty">Not available this season</span>
-            ) : (
-              <ul class="schedule-list">
-                {b.fall.map((v) => (
-                  <li><span class="schedule-marker fall"></span>{v}</li>
-                ))}
-              </ul>
-            )}
-          </div>
+          {columns.map((c) => (
+            <div class="schedule-cell schedule-cell-status">
+              <div class={`schedule-status-tag ${c.cls}`}>{c.label}</div>
+              {b[c.key].length === 0 ? (
+                <span class="schedule-empty">—</span>
+              ) : (
+                <ul class="schedule-list">
+                  {b[c.key].map((v) => (
+                    <li><span class={`schedule-marker ${c.cls}`}></span>{v}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
         </div>
       ))}
     </div>
