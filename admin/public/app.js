@@ -253,6 +253,33 @@ function applyVarietyChangeToImages(breed, prev, next) {
   }
 }
 
+function varietyPriceEditor(breed) {
+  const wrap = h('div', { class: 'variety-editor' });
+  breed.varieties = breed.varieties || [];
+  let prevNames = breed.varieties.map((v) => v.name);
+  function commit() {
+    const nextNames = breed.varieties.map((v) => v.name);
+    applyVarietyChangeToImages(breed, prevNames, nextNames);
+    prevNames = nextNames.slice();
+    saveBreed(breed.id, breed);
+  }
+  function render() {
+    wrap.innerHTML = '';
+    breed.varieties.forEach((v, i) => {
+      wrap.appendChild(h('div', { class: 'variety-row' }, [
+        h('input', { type: 'text', class: 'variety-name', value: v.name || '', placeholder: 'Variety name',
+          onchange: (e) => { breed.varieties[i].name = e.target.value; commit(); } }),
+        h('input', { type: 'text', class: 'variety-price', value: v.price || '', placeholder: 'Price (e.g. $25)',
+          onchange: (e) => { const p = e.target.value.trim(); if (p) breed.varieties[i].price = p; else delete breed.varieties[i].price; commit(); } }),
+        h('button', { type: 'button', class: 'btn btn-sm btn-danger', onclick: () => { breed.varieties.splice(i, 1); commit(); render(); } }, 'Remove'),
+      ]));
+    });
+    wrap.appendChild(h('button', { type: 'button', class: 'btn btn-secondary btn-sm', onclick: () => { breed.varieties.push({ name: '' }); render(); } }, '+ Add variety'));
+  }
+  render();
+  return wrap;
+}
+
 // ===== Tab: Breeds =====
 function renderBreedsTab() {
   const container = h('div', { class: 'panel' });
@@ -316,15 +343,9 @@ function renderBreedEditor(breed) {
   renderTraits();
   wrap.appendChild(card('Traits', traitsWrap));
 
-  let prevVarieties = (breed.varieties || []).slice();
-  wrap.appendChild(card('Varieties',
-    h('p', { class: 'hint' }, 'Add a pill for each color/variety you carry. Shown under the breed description. Renaming or deleting a variety will update any photos tagged with it.'),
-    chipListEditor(breed.varieties || [], (next) => {
-      applyVarietyChangeToImages(breed, prevVarieties, next);
-      breed.varieties = next;
-      prevVarieties = next.slice();
-      saveBreed(breed.id, breed);
-    })
+  wrap.appendChild(card('Varieties & pricing',
+    h('p', { class: 'hint' }, 'Add a row for each color/variety you carry, with an optional price per chick (free text — e.g. "$25" or "Starting at $20"). Renaming a variety updates any photos tagged with it.'),
+    varietyPriceEditor(breed)
   ));
 
   wrap.appendChild(card(`Available (${site?.schedule?.availableLabel || 'Available'})`,
@@ -344,7 +365,7 @@ function renderBreedEditor(breed) {
 
   wrap.appendChild(card('Gallery images',
     h('p', { class: 'hint' }, 'Tag each photo with a variety so the matching pill highlights when visitors click through the gallery.'),
-    renderImageManager('breeds/' + breed.id, breed.images || [], breed.varieties || [], (imgs) => { breed.images = imgs; saveBreed(breed.id, breed); })
+    renderImageManager('breeds/' + breed.id, breed.images || [], (breed.varieties || []).map((v) => v.name), (imgs) => { breed.images = imgs; saveBreed(breed.id, breed); })
   ));
 
   return wrap;
