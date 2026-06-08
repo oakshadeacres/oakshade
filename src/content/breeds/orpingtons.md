@@ -22,7 +22,7 @@ varieties:
   - Gold Laced
   - Silver Laced
   - Chocolate Laced
-  - 'Lavender/Black '
+  - Lavender/Black Split To Lavender
   - Blue/Black/Splash
   - Lavender/Black Mottled
   - 'Chocolate/Mauve/Splash '
@@ -35,14 +35,8 @@ images:
       /images/breeds/orpingtons/1776967585930-662891068-122186569784867558-1085497176277836907-n.webp
     variety: Chocolate Laced
   - url: >-
-      /images/breeds/orpingtons/1776967597517-665988332-122186569574867558-3474538190247921349-n.webp
-    variety: Chocolate Laced
-  - url: >-
       /images/breeds/orpingtons/1776967611081-672674120-122188102352867558-6275461667022447544-n.webp
     variety: Gold Laced
-  - url: >-
-      /images/breeds/orpingtons/1777652964734-662891068-122186569784867558-1085497176277836907-n.webp
-    variety: Chocolate Laced
 spring:
   - Lavender / Black Split to Lavender
   - Chocolate Silver Laced
