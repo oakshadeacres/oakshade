@@ -235,7 +235,14 @@ function writeBreed(id, data) {
     order: Number.isFinite(data.order) ? data.order : 0,
     description: String(data.description || ''),
     traits: Array.isArray(data.traits) ? data.traits.map(t => ({ label: String(t.label || ''), val: String(t.val || '') })) : [],
-    varieties: Array.isArray(data.varieties) ? data.varieties.map(String) : [],
+    varieties: Array.isArray(data.varieties)
+      ? data.varieties.map((v) => {
+          if (typeof v === 'string') return { name: v };
+          const out = { name: String(v.name || '') };
+          if (v.price) out.price = String(v.price);
+          return out;
+        }).filter((v) => v.name)
+      : [],
     images: Array.isArray(data.images)
       ? data.images.map((i) => {
           if (typeof i === 'string') return { url: i };
@@ -244,8 +251,9 @@ function writeBreed(id, data) {
           return out;
         }).filter((i) => i.url)
       : [],
-    spring: Array.isArray(data.spring) ? data.spring.map(String) : [],
-    fall: Array.isArray(data.fall) ? data.fall.map(String) : [],
+    available: Array.isArray(data.available) ? data.available.map(String) : [],
+    waitlist: Array.isArray(data.waitlist) ? data.waitlist.map(String) : [],
+    unavailable: Array.isArray(data.unavailable) ? data.unavailable.map(String) : [],
   };
   const filepath = path.join(BREEDS_DIR, `${id}.md`);
   fs.writeFileSync(filepath, matter.stringify('', out));
