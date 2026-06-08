@@ -19,15 +19,15 @@ traits:
   - label: Purpose
     val: Dual Purpose
 varieties:
-  - Gold Laced
-  - Silver Laced
-  - Chocolate Laced
-  - Lavender/Black Split To Lavender
-  - Blue/Black/Splash
-  - Lavender/Black Mottled
-  - 'Chocolate/Mauve/Splash '
-  - Buff
-  - Jubilee
+  - name: Gold Laced
+  - name: Silver Laced
+  - name: Chocolate Laced
+  - name: Lavender/Black Split To Lavender
+  - name: Blue/Black/Splash
+  - name: Lavender/Black Mottled
+  - name: 'Chocolate/Mauve/Splash '
+  - name: Buff
+  - name: Jubilee
 images:
   - url: /images/breeds/orpingtons/1776967573621-chocolaced.webp
     variety: Chocolate Laced

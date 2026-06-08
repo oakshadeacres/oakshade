@@ -31,7 +31,7 @@ const scheduleBreeds = breeds.map((b) => ({
 const breedOptions: string[] = [];
 breeds.forEach((b) => {
   if (b.varieties.length) {
-    b.varieties.forEach((v) => breedOptions.push(`${b.name} – ${v}`));
+    b.varieties.forEach((v) => breedOptions.push(`${b.name} – ${v.name}`));
   } else {
     breedOptions.push(b.name);
   }

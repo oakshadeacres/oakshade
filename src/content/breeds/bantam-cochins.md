@@ -18,7 +18,7 @@ traits:
   - label: Purpose
     val: 'Ornamental,Pets'
 varieties:
-  - Calico
+  - name: Calico
 images:
   - url: /images/breeds/bantam-cochins/1776966957409-cochin.webp
     variety: Calico

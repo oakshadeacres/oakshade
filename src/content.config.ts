@@ -9,7 +9,14 @@ const breeds = defineCollection({
     order: z.number().default(0),
     description: z.string(),
     traits: z.array(z.object({ label: z.string(), val: z.string() })).default([]),
-    varieties: z.array(z.string()).default([]),
+    varieties: z
+      .array(
+        z.union([
+          z.string().transform((s) => ({ name: s })),
+          z.object({ name: z.string(), price: z.string().optional() }),
+        ])
+      )
+      .default([]),
     images: z
       .array(z.object({ url: z.string(), variety: z.string().optional() }))
       .default([]),

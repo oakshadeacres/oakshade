@@ -18,9 +18,9 @@ traits:
   - label: Purpose
     val: 'Ornamental, Pets'
 varieties:
-  - Tolbunt
-  - White Crested Blue
-  - White Crested Chocolate
+  - name: Tolbunt
+  - name: White Crested Blue
+  - name: White Crested Chocolate
 images:
   - url: /images/breeds/polish/01-polish-group.jpg
     variety: Tolbunt

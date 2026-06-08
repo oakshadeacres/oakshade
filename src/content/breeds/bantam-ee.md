@@ -18,7 +18,7 @@ traits:
   - label: Purpose
     val: 'Ornamental,Pets'
 varieties:
-  - Assorted Colors
+  - name: Assorted Colors
 images: []
 spring: []
 fall:
