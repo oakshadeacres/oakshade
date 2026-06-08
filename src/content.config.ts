@@ -20,8 +20,6 @@ const breeds = defineCollection({
     images: z
       .array(z.object({ url: z.string(), variety: z.string().optional() }))
       .default([]),
-    spring: z.array(z.string()).default([]),
-    fall: z.array(z.string()).default([]),
     available: z.array(z.string()).default([]),
     waitlist: z.array(z.string()).default([]),
     unavailable: z.array(z.string()).default([]),

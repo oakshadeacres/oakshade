@@ -22,10 +22,6 @@ varieties:
 images:
   - url: /images/breeds/bantam-cochins/1776966957409-cochin.webp
     variety: Calico
-spring:
-  - Calico
-fall:
-  - Chocolate Mottled
 available:
   - Calico
   - Chocolate Mottled

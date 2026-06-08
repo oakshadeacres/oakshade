@@ -37,17 +37,6 @@ images:
   - url: >-
       /images/breeds/orpingtons/1776967611081-672674120-122188102352867558-6275461667022447544-n.webp
     variety: Gold Laced
-spring:
-  - Lavender / Black Split to Lavender
-  - Chocolate Silver Laced
-  - Gold Laced
-  - Jubilee
-  - Chocolate / Splash / Mauve
-fall:
-  - Buff
-  - English Silver Laced
-  - Blue / Black / BBS Splash
-  - Lavender Mottled / Black Mottled
 available:
   - Lavender / Black Split to Lavender
   - Chocolate Silver Laced

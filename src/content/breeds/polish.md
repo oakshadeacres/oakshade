@@ -24,11 +24,6 @@ varieties:
 images:
   - url: /images/breeds/polish/01-polish-group.jpg
     variety: Tolbunt
-spring:
-  - Tolbunt
-fall:
-  - White Crested Blue
-  - White Crested Chocolate
 available:
   - Tolbunt
   - White Crested Blue

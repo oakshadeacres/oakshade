@@ -20,9 +20,6 @@ traits:
 varieties:
   - name: Assorted Colors
 images: []
-spring: []
-fall:
-  - Easter Eggers
 available:
   - Easter Eggers
 waitlist: []
