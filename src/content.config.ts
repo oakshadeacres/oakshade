@@ -15,6 +15,9 @@ const breeds = defineCollection({
       .default([]),
     spring: z.array(z.string()).default([]),
     fall: z.array(z.string()).default([]),
+    available: z.array(z.string()).default([]),
+    waitlist: z.array(z.string()).default([]),
+    unavailable: z.array(z.string()).default([]),
   }),
 });
 
