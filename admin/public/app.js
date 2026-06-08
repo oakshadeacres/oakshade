@@ -298,6 +298,72 @@ function varietyPriceEditor(breed) {
   return wrap;
 }
 
+// Drag-and-drop board to move varieties between Available / Waitlist / Unavailable.
+function availabilityBoard(breed) {
+  const cols = [
+    { key: 'available', label: site?.schedule?.availableLabel || 'Available' },
+    { key: 'waitlist', label: site?.schedule?.waitlistLabel || 'Waitlist' },
+    { key: 'unavailable', label: site?.schedule?.unavailableLabel || 'Unavailable' },
+  ];
+  cols.forEach((c) => { breed[c.key] = Array.isArray(breed[c.key]) ? breed[c.key] : []; });
+  const wrap = h('div', { class: 'avail-board' });
+  let drag = null; // { from: key, index }
+  const save = () => saveBreed(breed.id, breed);
+
+  function render() {
+    wrap.innerHTML = '';
+    cols.forEach((c) => {
+      const list = breed[c.key];
+      const items = h('div', { class: 'avail-items' });
+      list.forEach((name, i) => {
+        const grip = h('span', { class: 'avail-grip', draggable: 'true', title: 'Drag to another list' }, '⠿');
+        const chip = h('div', { class: 'avail-chip' }, [
+          grip,
+          h('input', { type: 'text', value: name, onchange: (e) => { list[i] = e.target.value; save(); } }),
+          h('button', { type: 'button', class: 'chip-del', title: 'Remove', onclick: () => { list.splice(i, 1); save(); render(); } }, '×'),
+        ]);
+        grip.addEventListener('dragstart', (e) => {
+          drag = { from: c.key, index: i };
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', name);
+          try { e.dataTransfer.setDragImage(chip, 12, 12); } catch (_) {}
+          chip.classList.add('dragging');
+        });
+        grip.addEventListener('dragend', () => { chip.classList.remove('dragging'); drag = null; });
+        items.appendChild(chip);
+      });
+
+      const col = h('div', { class: 'avail-col' }, [
+        h('div', { class: 'avail-col-head' }, c.label),
+        items,
+        h('button', { type: 'button', class: 'btn btn-secondary btn-sm', onclick: () => { list.push(''); save(); render(); } }, '+ Add'),
+      ]);
+      col.addEventListener('dragover', (e) => {
+        if (!drag) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        col.classList.add('drag-over');
+      });
+      col.addEventListener('dragleave', (e) => {
+        if (!col.contains(e.relatedTarget)) col.classList.remove('drag-over');
+      });
+      col.addEventListener('drop', (e) => {
+        e.preventDefault();
+        col.classList.remove('drag-over');
+        if (!drag || drag.from === c.key) { drag = null; return; }
+        const [moved] = breed[drag.from].splice(drag.index, 1);
+        breed[c.key].push(moved);
+        drag = null;
+        save();
+        render();
+      });
+      wrap.appendChild(col);
+    });
+  }
+  render();
+  return wrap;
+}
+
 // ===== Tab: Breeds =====
 function renderBreedsTab() {
   const container = h('div', { class: 'panel' });
@@ -366,19 +432,9 @@ function renderBreedEditor(breed) {
     varietyPriceEditor(breed)
   ));
 
-  wrap.appendChild(card(`Available (${site?.schedule?.availableLabel || 'Available'})`,
-    h('p', { class: 'hint' }, 'Varieties of this breed currently available.'),
-    chipListEditor(breed.available || [], (v) => { breed.available = v; saveBreed(breed.id, breed); })
-  ));
-
-  wrap.appendChild(card(`Waitlist (${site?.schedule?.waitlistLabel || 'Waitlist'})`,
-    h('p', { class: 'hint' }, 'Varieties you are taking waitlist sign-ups for.'),
-    chipListEditor(breed.waitlist || [], (v) => { breed.waitlist = v; saveBreed(breed.id, breed); })
-  ));
-
-  wrap.appendChild(card(`Unavailable (${site?.schedule?.unavailableLabel || 'Unavailable'})`,
-    h('p', { class: 'hint' }, 'Varieties not currently available.'),
-    chipListEditor(breed.unavailable || [], (v) => { breed.unavailable = v; saveBreed(breed.id, breed); })
+  wrap.appendChild(card('Availability',
+    h('p', { class: 'hint' }, 'Drag a variety by its handle (⠿) to move it between Available, Waitlist, and Unavailable. Click a name to rename, × to remove, + Add to add one.'),
+    availabilityBoard(breed)
   ));
 
   wrap.appendChild(card('Gallery images',

@@ -1078,6 +1078,72 @@ input, textarea, select { font: inherit; color: inherit; }
 .variety-row .variety-price { flex: 1 1 0; }
 .variety-editor > .btn { margin-top: 0.25rem; }
 
+/* Availability drag-and-drop board */
+.avail-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+.avail-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 96px;
+  padding: 0.5rem;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper-2);
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.avail-col.drag-over {
+  border-color: var(--color-accent);
+  background: var(--color-accent-faint);
+}
+.avail-col-head {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-2);
+}
+.avail-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 1.5rem;
+}
+.avail-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.15rem 0.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-rule-2);
+  border-radius: var(--radius-xs);
+}
+.avail-chip.dragging { opacity: 0.4; }
+.avail-grip {
+  cursor: grab;
+  color: var(--color-ink-4);
+  user-select: none;
+  padding: 0 0.1rem;
+  line-height: 1;
+}
+.avail-grip:active { cursor: grabbing; }
+.avail-chip input {
+  flex: 1 1 0;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  padding: 0.1rem 0.15rem;
+}
+.avail-chip input:focus { outline: 1px solid var(--color-focus); border-radius: 2px; }
+@media (max-width: 640px) {
+  .avail-board { grid-template-columns: 1fr; }
+}
+
 .whatsnew {
   display: flex;
   gap: var(--space-4);
