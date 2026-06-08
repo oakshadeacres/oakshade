@@ -19,7 +19,6 @@ traits:
     val: 'Ornamental,Pets'
 varieties:
   - Calico
-  - Chocolate Mottled
 images:
   - url: /images/breeds/bantam-cochins/1776966957409-cochin.webp
     variety: Calico

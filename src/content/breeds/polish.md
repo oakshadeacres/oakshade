@@ -23,6 +23,7 @@ varieties:
   - White Crested Chocolate
 images:
   - url: /images/breeds/polish/01-polish-group.jpg
+    variety: Tolbunt
 spring:
   - Tolbunt
 fall:

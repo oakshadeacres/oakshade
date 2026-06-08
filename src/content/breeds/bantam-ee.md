@@ -19,10 +19,7 @@ traits:
     val: 'Ornamental,Pets'
 varieties:
   - Assorted Colors
-  - Blue Egg Lines
-  - Olive Egg Lines
-images:
-  - url: /images/breeds/bantam-ee/01-chicks.jpg
+images: []
 spring: []
 fall:
   - Easter Eggers
