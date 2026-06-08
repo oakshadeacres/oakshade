@@ -22,8 +22,9 @@ const breeds = breedEntries
 
 const scheduleBreeds = breeds.map((b) => ({
   name: b.name,
-  spring: b.spring,
-  fall: b.fall,
+  available: b.available,
+  waitlist: b.waitlist,
+  unavailable: b.unavailable,
 }));
 
 const breedOptions: string[] = [];
@@ -60,8 +61,9 @@ breedOptions.push('Multiple Breeds');
     label={site.schedule.label}
     title={site.schedule.title}
     sub={site.schedule.sub}
-    springLabel={site.schedule.springLabel}
-    fallLabel={site.schedule.fallLabel}
+    availableLabel={site.schedule.availableLabel}
+    waitlistLabel={site.schedule.waitlistLabel}
+    unavailableLabel={site.schedule.unavailableLabel}
     footerNote={site.schedule.footerNote}
     breeds={scheduleBreeds}
   />

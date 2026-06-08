@@ -83,10 +83,13 @@
   },
   "schedule": {
     "label": "What's Available",
-    "title": "Hatch Schedule & Availability",
-    "sub": "Our hatch schedule is updated regularly. Reach out on Facebook to claim your spot — popular breeds go fast!",
+    "title": "Current Availability",
+    "sub": "Our availability is updated regularly. Reach out on Facebook to claim your spot — popular breeds go fast!",
     "springLabel": "🌱 Spring 2026",
     "fallLabel": "🍂 Fall 2026",
+    "availableLabel": "✅ Available",
+    "waitlistLabel": "⏳ Waitlist",
+    "unavailableLabel": "Unavailable",
     "footerNote": "✉️ Reach out on Facebook or use the contact form to reserve your spot — popular varieties go fast!"
   },
   "order": {
