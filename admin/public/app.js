@@ -2,6 +2,7 @@
 const TABS = [
   { id: 'breeds', label: 'Breeds' },
   { id: 'schedule', label: 'Schedule' },
+  { id: 'disclaimer', label: 'Disclaimer' },
   { id: 'hero', label: 'Hero' },
   { id: 'about', label: 'About' },
   { id: 'order', label: 'Order' },
@@ -102,6 +103,7 @@ function renderPanel() {
   switch (activeTab) {
     case 'breeds': return renderBreedsTab();
     case 'schedule': return renderScheduleTab();
+    case 'disclaimer': return renderDisclaimerTab();
     case 'hero': return renderHeroTab();
     case 'about': return renderAboutTab();
     case 'order': return renderOrderTab();
@@ -562,6 +564,18 @@ function renderScheduleTab() {
         ]),
       ])
     )),
+  ));
+  tabPanel.appendChild(container);
+}
+
+// ===== Tab: Disclaimer =====
+function renderDisclaimerTab() {
+  const d = site.disclaimer || (site.disclaimer = { enabled: true, heading: '', body: '' });
+  const container = h('div', {});
+  container.appendChild(card('Hatching-eggs disclaimer',
+    field('Show on site', checkboxInput(d.enabled, (v) => { d.enabled = v; saveSection('disclaimer', d); }, 'Display this callout above the "How to Preorder" section')),
+    field('Heading', textInput(d.heading, (v) => { d.heading = v; saveSection('disclaimer', d); })),
+    field('Body', textareaInput(d.body, (v) => { d.body = v; saveSection('disclaimer', d); }, 5), 'Use Enter for line breaks.'),
   ));
   tabPanel.appendChild(container);
 }
