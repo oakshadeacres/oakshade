@@ -92,6 +92,11 @@
     "unavailableLabel": "Unavailable",
     "footerNote": "✉️ Reach out on Facebook or use the contact form to reserve your spot — popular varieties go fast!"
   },
+  "disclaimer": {
+    "enabled": true,
+    "heading": "About Hatching Eggs",
+    "body": "Hatching eggs are sold as-is — hatch rates depend on your incubator, handling, and shipping, and can never be guaranteed. Eggs are fragile and shipping carries inherent risk. Please reach out with any questions before ordering."
+  },
   "order": {
     "label": "How It Works",
     "title": "How to Preorder",

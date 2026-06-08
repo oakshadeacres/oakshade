@@ -1,0 +1,18 @@
+---
+interface Props {
+  enabled: boolean;
+  heading: string;
+  body: string;
+}
+const { enabled, heading, body } = Astro.props;
+---
+{enabled && (
+  <section class="disclaimer reveal">
+    <div class="disclaimer-inner">
+      <div class="disclaimer-card">
+        {heading && <h3 class="disclaimer-heading">{heading}</h3>}
+        <p class="disclaimer-body">{body}</p>
+      </div>
+    </div>
+  </section>
+)}

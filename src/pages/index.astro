@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Breeds from '../components/Breeds.astro';
 import Schedule from '../components/Schedule.astro';
+import Disclaimer from '../components/Disclaimer.astro';
 import Order from '../components/Order.astro';
 import ContactSection from '../components/ContactSection.astro';
 import PickupShipping from '../components/PickupShipping.astro';
@@ -66,6 +67,11 @@ breedOptions.push('Multiple Breeds');
     unavailableLabel={site.schedule.unavailableLabel}
     footerNote={site.schedule.footerNote}
     breeds={scheduleBreeds}
+  />
+  <Disclaimer
+    enabled={site.disclaimer.enabled}
+    heading={site.disclaimer.heading}
+    body={site.disclaimer.body}
   />
   <Order
     label={site.order.label}
