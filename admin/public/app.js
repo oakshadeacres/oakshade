@@ -30,9 +30,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderTabs();
   await Promise.all([loadSite(), loadBreeds()]);
   renderPanel();
+  initWhatsNew();
   pollFollowups();
   setInterval(pollFollowups, 30000);
 });
+
+// One-time "what's new" banner, dismissible and remembered in localStorage.
+function initWhatsNew() {
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('oakshade_whatsnew_v1') === 'dismissed'; } catch {}
+  if (dismissed) return;
+  const el = document.getElementById('whatsnew');
+  if (el) el.classList.remove('hidden');
+}
+
+function dismissWhatsNew() {
+  try { localStorage.setItem('oakshade_whatsnew_v1', 'dismissed'); } catch {}
+  const el = document.getElementById('whatsnew');
+  if (el) el.classList.add('hidden');
+}
 
 function renderTabs() {
   tabBar.innerHTML = TABS.map(t =>

@@ -1077,3 +1077,43 @@ input, textarea, select { font: inherit; color: inherit; }
 .variety-row .variety-name { flex: 2 1 0; }
 .variety-row .variety-price { flex: 1 1 0; }
 .variety-editor > .btn { margin-top: 0.25rem; }
+
+.whatsnew {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  justify-content: space-between;
+  background: var(--color-accent-faint);
+  border: 1px solid var(--color-accent-soft);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-5);
+}
+.whatsnew-title {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-accent-deep);
+  margin-bottom: var(--space-2);
+}
+.whatsnew-text ul { margin: 0; padding-left: 1.1rem; }
+.whatsnew-text li {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  line-height: 1.5;
+  margin-bottom: 2px;
+}
+.whatsnew-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-ink-3);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+.whatsnew-close:hover { color: var(--color-ink); }
