@@ -168,7 +168,7 @@ const initialFallbackName = firstBreed && !firstImage
       const currentName = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide]?.name || null);
       const match = currentName ? b.varieties.find((v) => v.name === currentName) : null;
       if (match && match.price) {
-        amountEl.textContent = `${match.name.trim()} — ${match.price}`;
+        amountEl.textContent = match.price;
         traitEl.style.display = '';
       } else {
         traitEl.style.display = 'none';
