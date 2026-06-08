@@ -19,15 +19,15 @@ traits:
   - label: Purpose
     val: Dual Purpose
 varieties:
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
-  - '[object Object]'
+  - name: Gold Laced
+  - name: Silver Laced
+  - name: Chocolate Laced
+  - name: Lavender/Black Split To Lavender
+  - name: Blue/Black/Splash
+  - name: Lavender/Black Mottled
+  - name: 'Chocolate/Mauve/Splash '
+  - name: Buff
+  - name: Jubilee
 images:
   - url: /images/breeds/orpingtons/1776967573621-chocolaced.webp
     variety: Chocolate Laced
@@ -37,7 +37,17 @@ images:
   - url: >-
       /images/breeds/orpingtons/1776967611081-672674120-122188102352867558-6275461667022447544-n.webp
     variety: Gold Laced
-spring: []
-fall: []
+available:
+  - Lavender / Black Split to Lavender
+  - Chocolate Silver Laced
+  - Gold Laced
+  - Jubilee
+  - Chocolate / Splash / Mauve
+  - Buff
+  - English Silver Laced
+  - Blue / Black / BBS Splash
+  - Lavender Mottled / Black Mottled
+waitlist: []
+unavailable: []
 ---
 
