@@ -49,14 +49,14 @@ images:
 available:
   - Lavender / Black Split to Lavender
   - Chocolate Silver Laced
-  - Gold Laced
   - Jubilee
-  - Chocolate / Splash / Mauve
-  - Buff
   - English Silver Laced
-  - Blue / Black / BBS Splash
+waitlist:
+  - Gold Laced
   - Lavender Mottled / Black Mottled
-waitlist: []
-unavailable: []
+  - Chocolate / Splash / Mauve
+unavailable:
+  - Buff
+  - Blue / Black / BBS Splash
 ---
 

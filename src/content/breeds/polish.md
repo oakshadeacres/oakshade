@@ -29,9 +29,9 @@ images:
     variety: Tolbunt
 available:
   - Tolbunt
+waitlist: []
+unavailable:
   - White Crested Blue
   - White Crested Chocolate
-waitlist: []
-unavailable: []
 ---
 

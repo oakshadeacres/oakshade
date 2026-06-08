@@ -25,8 +25,8 @@ images:
     variety: Calico
 available:
   - Calico
-  - Chocolate Mottled
 waitlist: []
-unavailable: []
+unavailable:
+  - Chocolate Mottled
 ---
 

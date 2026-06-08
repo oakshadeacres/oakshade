@@ -21,9 +21,9 @@ varieties:
   - name: Assorted Colors
     price: $5
 images: []
-available:
+available: []
+waitlist:
   - Easter Eggers
-waitlist: []
 unavailable: []
 ---
 
