@@ -375,8 +375,37 @@ app.delete('/api/images', (req, res) => {
   res.json({ success: true });
 });
 
+// --- Auto-restart when server.js changes on disk -------------------------
+// The admin is a long-lived process: its handler logic lives in memory, so a
+// freshly pulled server.js (via Deploy's git pull, or a manual git pull) has
+// no effect until the process restarts — and stale handlers can silently
+// corrupt content. Watch this file and exit on change so the service
+// supervisor (systemd: Restart=on-failure/always) relaunches with fresh code.
+let deployInProgress = false;
+let restartArmed = false;
+
+function requestRestart(reason) {
+  if (deployInProgress) { restartArmed = true; return; }
+  console.log(`${reason} — exiting so the service restarts with fresh code`);
+  process.exit(1);
+}
+
+function watchForCodeChanges() {
+  // Only auto-exit when a supervisor will relaunch us. systemd sets
+  // INVOCATION_ID; set RESTART_ON_CHANGE=1 to force it in other setups.
+  if (!process.env.INVOCATION_ID && process.env.RESTART_ON_CHANGE !== '1') return;
+  let timer = null;
+  fs.watchFile(__filename, { interval: 2000 }, (curr, prev) => {
+    if (!curr.mtimeMs || curr.mtimeMs === prev.mtimeMs) return;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => requestRestart('server.js changed on disk'), 1000);
+  });
+  console.log('  Auto-restart on server.js change: enabled');
+}
+
 // Deploy
 app.post('/api/deploy', (req, res) => {
+  deployInProgress = true;
   const timestamp = new Date().toISOString();
   const commitMsg = `Content update ${timestamp}`;
   // Stage any local edits, commit if there are staged changes, rebase onto
@@ -390,18 +419,28 @@ app.post('/api/deploy', (req, res) => {
     'git push origin main',
   ].join(' && ');
   exec(cmd, { cwd: PROJECT_ROOT }, (err, stdout, stderr) => {
+    deployInProgress = false;
+    // If the pull updated server.js mid-deploy, restart now that we're idle.
+    const finish = () => {
+      if (!restartArmed) return;
+      restartArmed = false;
+      setTimeout(() => requestRestart('server.js updated by deploy'), 500);
+    };
     if (err) {
       console.error('Deploy failed:', stderr);
-      return res.status(500).json({ error: 'Deploy failed', details: stderr });
+      res.status(500).json({ error: 'Deploy failed', details: stderr });
+      return finish();
     }
     const nothingNew =
       stdout.includes('Everything up-to-date') &&
       !stdout.includes('main ->');
     if (nothingNew) {
-      return res.json({ success: true, message: 'No changes to deploy' });
+      res.json({ success: true, message: 'No changes to deploy' });
+      return finish();
     }
     console.log('Deploy successful:', stdout);
     res.json({ success: true, message: 'Deployed successfully' });
+    finish();
   });
 });
 
@@ -456,4 +495,5 @@ app.listen(PORT, HOST, () => {
   Auth: ${HOST === '127.0.0.1' && !process.env.REQUIRE_AUTH ? 'disabled (localhost)' : 'enabled'}
   User: ${ADMIN_USER}
   `);
+  watchForCodeChanges();
 });
