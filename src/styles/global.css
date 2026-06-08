@@ -859,35 +859,6 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .variety-pill-empty { opacity: 0.45; cursor: default; }
 
-.breed-price {
-  flex-direction: column;
-  gap: 2px;
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-rule);
-}
-.breed-price-caption {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--color-ink-3);
-}
-.breed-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-}
-.breed-price-variety {
-  font-size: var(--text-sm);
-  color: var(--color-ink-2);
-}
-.breed-price-amount {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--text-xl);
-  color: var(--color-accent);
-}
-
 @media (max-width: 480px) {
   .breed-traits { grid-template-columns: 1fr; }
   .trait:nth-child(odd) { border-right: none; padding-right: 0; }

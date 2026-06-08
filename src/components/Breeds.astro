@@ -92,13 +92,6 @@ const initialFallbackName = firstBreed && !firstImage
       <div class="breed-info">
         <span class="breed-specialty" data-breed-specialty style="display:none">★ Our Specialty</span>
         <h3 data-breed-name></h3>
-        <div class="breed-price" data-breed-price style="display:none">
-          <span class="breed-price-caption">Price per chick</span>
-          <span class="breed-price-row">
-            <span class="breed-price-variety" data-breed-price-variety></span>
-            <span class="breed-price-amount" data-breed-price-amount></span>
-          </span>
-        </div>
         <p class="breed-desc" data-breed-desc></p>
         <div class="breed-traits" data-breed-traits></div>
       </div>
@@ -119,9 +112,6 @@ const initialFallbackName = firstBreed && !firstImage
     const imgNameEl = document.querySelector('[data-breed-img-name]');
     const counterEl = document.querySelector('[data-breed-img-counter]');
     const dotsEl = document.querySelector('[data-breed-dots]');
-    const priceEl = document.querySelector('[data-breed-price]');
-    const priceVarietyEl = document.querySelector('[data-breed-price-variety]');
-    const priceAmountEl = document.querySelector('[data-breed-price-amount]');
     const prevBtn = document.querySelector('[data-breed-prev]');
     const nextBtn = document.querySelector('[data-breed-next]');
 
@@ -170,16 +160,18 @@ const initialFallbackName = firstBreed && !firstImage
     }
 
     function renderPrice() {
+      const traitEl = document.querySelector('[data-breed-price-trait]');
+      const amountEl = document.querySelector('[data-breed-price-amount]');
+      if (!traitEl || !amountEl) return;
       const b = current();
       const hasImage = b.images.length > 0;
       const currentName = hasImage ? (b.images[slide]?.variety || null) : (b.varieties[slide]?.name || null);
       const match = currentName ? b.varieties.find((v) => v.name === currentName) : null;
       if (match && match.price) {
-        priceVarietyEl.textContent = match.name;
-        priceAmountEl.textContent = match.price;
-        priceEl.style.display = 'flex';
+        amountEl.textContent = `${match.name.trim()} — ${match.price}`;
+        traitEl.style.display = '';
       } else {
-        priceEl.style.display = 'none';
+        traitEl.style.display = 'none';
       }
     }
 
@@ -231,6 +223,20 @@ const initialFallbackName = firstBreed && !firstImage
         trait.appendChild(val);
         traitsEl.appendChild(trait);
       });
+      // Price-per-chick tile — styled like the other attributes, updated per variety.
+      const priceTrait = document.createElement('div');
+      priceTrait.className = 'trait';
+      priceTrait.setAttribute('data-breed-price-trait', '');
+      priceTrait.style.display = 'none';
+      const priceLabel = document.createElement('div');
+      priceLabel.className = 'trait-label';
+      priceLabel.textContent = 'Price per chick';
+      const priceVal = document.createElement('div');
+      priceVal.className = 'trait-val';
+      priceVal.setAttribute('data-breed-price-amount', '');
+      priceTrait.appendChild(priceLabel);
+      priceTrait.appendChild(priceVal);
+      traitsEl.appendChild(priceTrait);
       renderGallery();
       renderVarietyPills();
     }
