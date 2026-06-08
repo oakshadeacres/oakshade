@@ -48,5 +48,17 @@ fall:
   - English Silver Laced
   - Blue / Black / BBS Splash
   - Lavender Mottled / Black Mottled
+available:
+  - Lavender / Black Split to Lavender
+  - Chocolate Silver Laced
+  - Gold Laced
+  - Jubilee
+  - Chocolate / Splash / Mauve
+  - Buff
+  - English Silver Laced
+  - Blue / Black / BBS Splash
+  - Lavender Mottled / Black Mottled
+waitlist: []
+unavailable: []
 ---
 

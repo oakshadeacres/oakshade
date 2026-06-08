@@ -23,5 +23,9 @@ images: []
 spring: []
 fall:
   - Easter Eggers
+available:
+  - Easter Eggers
+waitlist: []
+unavailable: []
 ---
 

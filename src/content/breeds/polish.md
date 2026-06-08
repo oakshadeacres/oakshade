@@ -29,5 +29,11 @@ spring:
 fall:
   - White Crested Blue
   - White Crested Chocolate
+available:
+  - Tolbunt
+  - White Crested Blue
+  - White Crested Chocolate
+waitlist: []
+unavailable: []
 ---
 

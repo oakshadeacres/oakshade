@@ -26,5 +26,10 @@ spring:
   - Calico
 fall:
   - Chocolate Mottled
+available:
+  - Calico
+  - Chocolate Mottled
+waitlist: []
+unavailable: []
 ---
 
