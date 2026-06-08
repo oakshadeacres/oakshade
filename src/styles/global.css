@@ -599,8 +599,8 @@ input, select, textarea { font: inherit; color: inherit; }
   max-width: 56ch;
 }
 .about-text p:first-child {
-  font-family: var(--font-display);
-  font-style: normal;
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-style: italic;
   font-weight: 400;
   font-size: clamp(1.4rem, 2.4vw, 1.7rem);
   color: var(--color-ink);
