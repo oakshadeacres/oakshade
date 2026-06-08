@@ -327,14 +327,19 @@ function renderBreedEditor(breed) {
     })
   ));
 
-  wrap.appendChild(card(`Availability (${site?.schedule?.springLabel || 'Spring'})`,
-    h('p', { class: 'hint' }, 'What varieties of this breed are available this spring.'),
-    chipListEditor(breed.spring || [], (v) => { breed.spring = v; saveBreed(breed.id, breed); })
+  wrap.appendChild(card(`Available (${site?.schedule?.availableLabel || 'Available'})`,
+    h('p', { class: 'hint' }, 'Varieties of this breed currently available.'),
+    chipListEditor(breed.available || [], (v) => { breed.available = v; saveBreed(breed.id, breed); })
   ));
 
-  wrap.appendChild(card(`Availability (${site?.schedule?.fallLabel || 'Fall'})`,
-    h('p', { class: 'hint' }, 'What varieties of this breed are available this fall.'),
-    chipListEditor(breed.fall || [], (v) => { breed.fall = v; saveBreed(breed.id, breed); })
+  wrap.appendChild(card(`Waitlist (${site?.schedule?.waitlistLabel || 'Waitlist'})`,
+    h('p', { class: 'hint' }, 'Varieties you are taking waitlist sign-ups for.'),
+    chipListEditor(breed.waitlist || [], (v) => { breed.waitlist = v; saveBreed(breed.id, breed); })
+  ));
+
+  wrap.appendChild(card(`Unavailable (${site?.schedule?.unavailableLabel || 'Unavailable'})`,
+    h('p', { class: 'hint' }, 'Varieties not currently available.'),
+    chipListEditor(breed.unavailable || [], (v) => { breed.unavailable = v; saveBreed(breed.id, breed); })
   ));
 
   wrap.appendChild(card('Gallery images',
@@ -512,22 +517,27 @@ function renderScheduleTab() {
     field('Section label', textInput(s.label, (v) => { s.label = v; saveSection('schedule', s); })),
     field('Section title', textInput(s.title, (v) => { s.title = v; saveSection('schedule', s); })),
     field('Subtitle / intro', textareaInput(s.sub, (v) => { s.sub = v; saveSection('schedule', s); }, 2)),
-    field('Spring season label', textInput(s.springLabel, (v) => { s.springLabel = v; saveSection('schedule', s); })),
-    field('Fall season label', textInput(s.fallLabel, (v) => { s.fallLabel = v; saveSection('schedule', s); })),
+    field('Available label', textInput(s.availableLabel, (v) => { s.availableLabel = v; saveSection('schedule', s); })),
+    field('Waitlist label', textInput(s.waitlistLabel, (v) => { s.waitlistLabel = v; saveSection('schedule', s); })),
+    field('Unavailable label', textInput(s.unavailableLabel, (v) => { s.unavailableLabel = v; saveSection('schedule', s); })),
     field('Footer note', textareaInput(s.footerNote, (v) => { s.footerNote = v; saveSection('schedule', s); }, 2)),
   ));
-  container.appendChild(card('What\'s available each season',
-    h('p', { class: 'hint' }, 'Edit per-breed availability on the Breeds tab — each breed has its own Spring and Fall lists.'),
+  container.appendChild(card('What\'s available',
+    h('p', { class: 'hint' }, 'Edit per-breed availability on the Breeds tab — each breed has Available, Waitlist, and Unavailable lists.'),
     h('div', { class: 'schedule-matrix' }, breeds.map(b =>
       h('div', { class: 'schedule-matrix-row' }, [
         h('div', { class: 'schedule-matrix-breed' }, b.name),
         h('div', { class: 'schedule-matrix-col' }, [
-          h('strong', {}, s.springLabel),
-          (b.spring || []).length ? h('ul', {}, (b.spring || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+          h('strong', {}, s.availableLabel),
+          (b.available || []).length ? h('ul', {}, (b.available || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
         ]),
         h('div', { class: 'schedule-matrix-col' }, [
-          h('strong', {}, s.fallLabel),
-          (b.fall || []).length ? h('ul', {}, (b.fall || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+          h('strong', {}, s.waitlistLabel),
+          (b.waitlist || []).length ? h('ul', {}, (b.waitlist || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
+        ]),
+        h('div', { class: 'schedule-matrix-col' }, [
+          h('strong', {}, s.unavailableLabel),
+          (b.unavailable || []).length ? h('ul', {}, (b.unavailable || []).map(v => h('li', {}, v))) : h('em', {}, 'none'),
         ]),
       ])
     )),
