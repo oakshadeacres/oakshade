@@ -18,17 +18,13 @@ traits:
   - label: Purpose
     val: 'Ornamental, Pets'
 varieties:
-  - name: Tolbunt
-  - name: White Crested Blue
-  - name: White Crested Chocolate
+  - '[object Object]'
+  - '[object Object]'
+  - '[object Object]'
 images:
   - url: /images/breeds/polish/01-polish-group.jpg
     variety: Tolbunt
-available:
-  - Tolbunt
-  - White Crested Blue
-  - White Crested Chocolate
-waitlist: []
-unavailable: []
+spring: []
+fall: []
 ---
 

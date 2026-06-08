@@ -18,11 +18,9 @@ traits:
   - label: Purpose
     val: 'Ornamental,Pets'
 varieties:
-  - name: Assorted Colors
+  - '[object Object]'
 images: []
-available:
-  - Easter Eggers
-waitlist: []
-unavailable: []
+spring: []
+fall: []
 ---
 

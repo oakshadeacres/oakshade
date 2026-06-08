@@ -18,14 +18,11 @@ traits:
   - label: Purpose
     val: 'Ornamental,Pets'
 varieties:
-  - name: Calico
+  - '[object Object]'
 images:
   - url: /images/breeds/bantam-cochins/1776966957409-cochin.webp
     variety: Calico
-available:
-  - Calico
-  - Chocolate Mottled
-waitlist: []
-unavailable: []
+spring: []
+fall: []
 ---
 
