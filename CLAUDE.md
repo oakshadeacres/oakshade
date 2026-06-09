@@ -49,5 +49,5 @@ sudo ln -s "$(which node)" /usr/local/bin/node
 ### Key Configuration
 - **Path alias**: `@/*` maps to `src/*` (tsconfig.json)
 - **Tailwind theme**: Custom rustic palette in `tailwind.config.mjs` (cream, barn-red, forest, earth)
-- **Deployment**: Netlify with Node 20, builds to `dist/`
-- **Contact form**: Uses Netlify Forms with honeypot spam protection
+- **Deployment**: GitHub Pages via `.github/workflows/deploy.yml` (Node 20, builds to `dist/`) on every push to main; live at https://oakshadeacres.github.io/oakshade/ — check runs with `gh run list --workflow deploy.yml`
+- **Contact form**: POSTs JSON to the `contact.endpoint` URL in `src/content/site.json`; falls back to a `mailto:` link when the endpoint is empty
