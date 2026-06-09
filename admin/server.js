@@ -4,6 +4,7 @@ const matter = require('gray-matter');
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const { applyWatermark } = require('./watermark');
 const nodemailer = require('nodemailer');
 const { createClient } = require('redis');
 const { exec } = require('child_process');
@@ -185,9 +186,15 @@ async function processImage(buffer, originalName, relativeDir) {
   const fullName = `${timestamp}-${baseName}.webp`;
   const thumbName = `${timestamp}-${baseName}-thumb.webp`;
 
-  await sharp(buffer)
+  // Breed gallery photos get the watermark; site assets (logos etc.) stay clean.
+  // Thumbs stay clean too — the mark would be illegible at 400px.
+  const shouldWatermark = /^breeds(\/|$)/.test(relativeDir);
+  let fullBuffer = await sharp(buffer)
     .rotate()
     .resize(IMAGE_CONFIG.full.maxWidth, null, { withoutEnlargement: true, fit: 'inside' })
+    .toBuffer();
+  if (shouldWatermark) fullBuffer = await applyWatermark(fullBuffer);
+  await sharp(fullBuffer)
     .webp({ quality: IMAGE_CONFIG.full.quality })
     .toFile(path.join(dir, fullName));
 
