@@ -28,6 +28,18 @@ const scheduleBreeds = breeds.map((b) => ({
   unavailable: b.unavailable,
 }));
 
+// Link each hero badge to its breed tab; tolerant of trailing spaces and
+// singular/plural label drift (e.g. "English Orpington " vs "English Orpingtons").
+const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+const heroBadges = site.hero.badges.map((badge) => {
+  const label = normalize(badge.label);
+  const match = breeds.find((b) => {
+    const name = normalize(b.name);
+    return name.startsWith(label) || label.startsWith(name);
+  });
+  return { ...badge, breedId: match?.id };
+});
+
 const breedOptions: string[] = [];
 breeds.forEach((b) => {
   if (b.varieties.length) {
@@ -44,7 +56,7 @@ breedOptions.push('Multiple Breeds');
     logoImage={site.hero.logoImage}
     title={site.hero.title}
     tagline={site.hero.tagline}
-    badges={site.hero.badges}
+    badges={heroBadges}
     ctas={site.hero.ctas}
   />
   <About

@@ -252,6 +252,15 @@ const initialFallbackName = firstBreed && !firstImage
       });
     });
 
+    // Hero badges link here with the breed to open; the anchor itself
+    // handles the scroll, we just activate the matching tab.
+    document.querySelectorAll('[data-breed-link]').forEach((link) => {
+      link.addEventListener('click', () => {
+        const tab = document.querySelector(`[data-breed-tab="${link.getAttribute('data-breed-link')}"]`);
+        if (tab) tab.click();
+      });
+    });
+
     function slideCount(b) {
       return b.images.length || b.varieties.length || 1;
     }

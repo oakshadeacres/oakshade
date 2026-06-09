@@ -466,6 +466,20 @@ input, select, textarea { font: inherit; color: inherit; }
   border-color: var(--color-accent-soft);
   color: var(--color-accent-deep);
 }
+a.badge {
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+a.badge:hover {
+  border-color: var(--color-ink-2);
+  color: var(--color-ink);
+}
+a.badge.rose:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-deep);
+  background: var(--color-accent-soft);
+}
 
 .hero-foot {
   display: flex;
