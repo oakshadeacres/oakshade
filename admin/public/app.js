@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initWhatsNew();
   pollFollowups();
   setInterval(pollFollowups, 30000);
+  // A drop that misses an upload zone would otherwise navigate the page to the image.
+  window.addEventListener('dragover', (e) => e.preventDefault());
+  window.addEventListener('drop', (e) => e.preventDefault());
 });
 
 // One-time "what's new" banner, dismissible and remembered in localStorage.
@@ -479,26 +482,43 @@ function renderImageManager(target, images, varieties, onchange) {
     });
     wrap.appendChild(grid);
 
-    const uploader = h('div', { class: 'image-uploader' }, [
-      h('p', {}, 'Upload new images (JPEG/PNG/WebP, up to 10 at a time). Each one opens a square crop editor — pan and zoom to frame it.'),
+    function handleFiles(fileList) {
+      const files = Array.from(fileList || []).filter((f) => f.type.startsWith('image/')).slice(0, 10);
+      if (!files.length) return;
+      openCropQueue(files, async (results) => {
+        if (!results.length) return;
+        flashSaving();
+        const fd = new FormData();
+        fd.append('type', target);
+        results.forEach(r => fd.append('images', r.blob, r.name));
+        const res = await fetch('/api/upload', { method: 'POST', body: fd });
+        if (!res.ok) { flashError('Upload failed'); return; }
+        const data = await res.json();
+        data.urls.forEach((u) => images.push({ url: u }));
+        onchange(images);
+        flashSaved();
+        refresh();
+      });
+    }
+
+    // dragenter/dragleave also fire when crossing child elements, so track depth.
+    let dragDepth = 0;
+    const uploader = h('div', {
+      class: 'image-uploader',
+      ondragenter: (e) => { e.preventDefault(); dragDepth++; uploader.classList.add('drag-over'); },
+      ondragover: (e) => { e.preventDefault(); },
+      ondragleave: () => { dragDepth--; if (dragDepth <= 0) { dragDepth = 0; uploader.classList.remove('drag-over'); } },
+      ondrop: (e) => {
+        e.preventDefault();
+        dragDepth = 0;
+        uploader.classList.remove('drag-over');
+        handleFiles(e.dataTransfer.files);
+      },
+    }, [
+      h('p', {}, 'Drag & drop images here, or choose files (JPEG/PNG/WebP, up to 10 at a time). Each one opens a square crop editor — pan and zoom to frame it.'),
       h('input', { type: 'file', multiple: true, accept: 'image/*', onchange: (e) => {
-        const files = Array.from(e.target.files || []);
+        handleFiles(e.target.files);
         e.target.value = '';
-        if (!files.length) return;
-        openCropQueue(files, async (results) => {
-          if (!results.length) return;
-          flashSaving();
-          const fd = new FormData();
-          fd.append('type', target);
-          results.forEach(r => fd.append('images', r.blob, r.name));
-          const res = await fetch('/api/upload', { method: 'POST', body: fd });
-          if (!res.ok) { flashError('Upload failed'); return; }
-          const data = await res.json();
-          data.urls.forEach((u) => images.push({ url: u }));
-          onchange(images);
-          flashSaved();
-          refresh();
-        });
       } }),
     ]);
     wrap.appendChild(uploader);

@@ -674,6 +674,12 @@ input, textarea, select { font: inherit; color: inherit; }
   transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
 .image-uploader:hover { border-color: var(--color-accent); background: var(--color-accent-faint); }
+.image-uploader.drag-over {
+  border-style: solid;
+  border-color: var(--color-accent);
+  background: var(--color-accent-faint);
+}
+.image-uploader.drag-over > * { pointer-events: none; }
 .image-uploader input[type="file"] { margin-top: var(--space-3); font-size: var(--text-sm); }
 
 /* ============================================================
