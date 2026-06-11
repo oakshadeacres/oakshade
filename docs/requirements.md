@@ -76,7 +76,7 @@ As the owner, I want to tag, reorder, and delete photos so that each variety's p
 
 **A7 — Protect photos with the farm brand.**
 As the owner, I want uploaded gallery photos watermarked so that shared/stolen images still credit the farm.
-*Covered by:* Server-side watermark pipeline: the logo (vectorized SVG, white at 50% opacity) is composited onto the bottom-right corner (18% of width, 3% inset) of every breed-gallery upload. Site assets (logos) and admin thumbnails stay clean. A one-time script (`admin/scripts/watermark-existing.js`, `--yes` guard) stamped pre-existing photos.
+*Covered by:* Server-side watermark pipeline: the logo (vectorized SVG, embossed style — offset dark/light edge copies that read as relief) is composited onto the bottom-right corner (18% of width, 3% inset) of every breed-gallery upload. Site assets (logos) and admin thumbnails stay clean. A one-time script (`admin/scripts/watermark-existing.js`, `--yes` guard) stamped pre-existing photos.
 
 **A8 — Publish with one click.**
 As the owner, I want a Deploy button so that my edits go live without using git.
