@@ -57,8 +57,8 @@ As the owner, I want to edit any text on the site so that I never need a develop
 *Covered by:* 13 admin tabs (Breeds, Schedule, Disclaimer, Hero, About, Order, Pickup & Shipping, Care Guide, FAQs, Testimonials, Contact, Nav, Footer) mapping to `site.json` sections and breed markdown files. Edits save on change with a saving/saved indicator.
 
 **A2 — Manage breeds end to end.**
-As the owner, I want to edit and reorder breeds so that the gallery always reflects the flock.
-*Covered by:* Breed list with per-breed editor: name, specialty flag, ordering, description, trait tiles, varieties with optional per-chick price (free text). Renaming a variety propagates to photos tagged with it. (Creating/deleting whole breeds is supported by the API but not exposed in the UI.)
+As the owner, I want to create, edit, reorder, and delete breeds so that the gallery always reflects the flock.
+*Covered by:* Breed list with add-breed form (new breeds open straight into the editor) and per-card delete with confirmation; per-breed editor: name, specialty flag, ordering, description, trait tiles, varieties with optional per-chick price (free text). Renaming a variety propagates to photos tagged with it. Deleting a breed removes its page and lists; its photo files stay on disk.
 
 **A3 — Manage availability by dragging.**
 As the owner, I want to move varieties between Available / Waitlist / Unavailable so that the public schedule stays current.
@@ -115,5 +115,5 @@ As the owner, I want to see questions the Facebook chatbot couldn't answer so th
 
 - No e-commerce: ordering happens via Facebook/contact form; prices are informational free text.
 - No user accounts on the public site; single shared credential for the admin.
-- Goats appear in legacy docs (`README.md`, `CLAUDE.md`) but the current content model covers chicken breeds only.
+- The content model covers chicken breeds only (goats were part of an earlier iteration and are gone from both code and docs).
 - chick-bot itself (Facebook webhook, NLP) lives outside this repo; only its escalation queue surfaces here.

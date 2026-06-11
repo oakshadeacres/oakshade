@@ -1,6 +1,6 @@
 # Oakshade Acres
 
-Farm website for Oakshade Acres built with Astro 5 and Tailwind CSS. Features chickens and goats available for purchase using markdown-based content collections.
+Website for Oakshade Acres, a specialty poultry hatchery in Dayton, Texas. Built with Astro 5; chicken breeds live in a markdown content collection and all other copy in `src/content/site.json`. See `docs/requirements.md` and `docs/functional-spec.md` for full documentation.
 
 ## Setup
 
@@ -10,7 +10,7 @@ Farm website for Oakshade Acres built with Astro 5 and Tailwind CSS. Features ch
 
 ## Admin App
 
-A local Express app for managing content (CRUD for animals, image uploads).
+A local Express app for managing content (breed CRUD, site copy, image uploads with crop + watermark, one-click deploy).
 
 ```bash
 cd admin

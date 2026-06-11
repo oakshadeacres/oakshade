@@ -381,6 +381,7 @@ function renderBreedsTab() {
 }
 
 function renderBreedsList() {
+  const wrap = h('div', {});
   const list = h('div', { class: 'breed-list-grid' });
   breeds.forEach(b => {
     const firstUrl = b.images && b.images[0] ? b.images[0].url : '';
@@ -393,11 +394,51 @@ function renderBreedsList() {
           b.specialty ? h('span', { class: 'star' }, ' ★') : null,
         ]),
         h('div', { class: 'breed-list-meta' }, `${(b.varieties || []).length} varieties · ${(b.images || []).length} images`),
-        h('button', { class: 'btn btn-primary btn-sm', onclick: () => { activeBreedId = b.id; renderPanel(); } }, 'Edit'),
+        h('div', { class: 'breed-list-actions' }, [
+          h('button', { class: 'btn btn-primary btn-sm', onclick: () => { activeBreedId = b.id; renderPanel(); } }, 'Edit'),
+          h('button', { class: 'btn btn-danger btn-sm', onclick: async () => {
+            const ok = await confirmAction(`Delete ${b.name}?`, 'This removes the breed, its varieties, and its availability lists from the site. Photos stay on disk and can be deleted from another breed’s gallery later if needed.');
+            if (!ok) return;
+            flashSaving();
+            const res = await fetch(`/api/breeds/${b.id}`, { method: 'DELETE' });
+            if (!res.ok) { flashError('Delete failed'); return; }
+            await loadBreeds();
+            flashSaved();
+            renderPanel();
+          } }, 'Delete'),
+        ]),
       ]),
     ]));
   });
-  return list;
+  wrap.appendChild(list);
+
+  const nameInput = h('input', { type: 'text', placeholder: 'New breed name…' });
+  async function addBreed() {
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    flashSaving();
+    const res = await fetch('/api/breeds', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      flashError(data.error || 'Could not create breed');
+      return;
+    }
+    const created = await res.json();
+    await loadBreeds();
+    flashSaved();
+    activeBreedId = created.id;
+    renderPanel();
+  }
+  nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addBreed(); });
+  wrap.appendChild(h('div', { class: 'breed-add-row' }, [
+    nameInput,
+    h('button', { class: 'btn btn-secondary btn-sm', onclick: addBreed }, '+ Add breed'),
+  ]));
+  return wrap;
 }
 
 function renderBreedEditor(breed) {

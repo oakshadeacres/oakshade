@@ -471,6 +471,17 @@ input, textarea, select { font: inherit; color: inherit; }
   margin-bottom: var(--space-2);
 }
 .breed-list-info .btn { align-self: flex-start; }
+.breed-list-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+.breed-list-actions .btn { align-self: auto; }
+.breed-add-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.breed-add-row input { max-width: 280px; }
 .star { color: var(--color-accent); margin-left: 2px; }
 
 /* ============================================================
