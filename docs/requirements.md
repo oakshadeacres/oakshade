@@ -1,5 +1,7 @@
 # Oakshade Acres — Requirements & User Stories
 
+> This document covers *what* the system does and for whom. For a rebuild-grade specification of *how* — data schemas, API contracts, validation rules, configuration, and exact behaviors — see [`functional-spec.md`](functional-spec.md).
+
 A retroactive write-up of the requirements and user stories covered by this project as built. Oakshade Acres is a small specialty poultry hatchery in Dayton, Texas. The project has two applications sharing one repository:
 
 1. **Public site** — a static, single-page Astro 5 site deployed to GitHub Pages, presenting the farm and its chicken breeds to prospective buyers.
@@ -55,8 +57,8 @@ As the owner, I want to edit any text on the site so that I never need a develop
 *Covered by:* 13 admin tabs (Breeds, Schedule, Disclaimer, Hero, About, Order, Pickup & Shipping, Care Guide, FAQs, Testimonials, Contact, Nav, Footer) mapping to `site.json` sections and breed markdown files. Edits save on change with a saving/saved indicator.
 
 **A2 — Manage breeds end to end.**
-As the owner, I want to create, edit, reorder, and delete breeds so that the gallery always reflects the flock.
-*Covered by:* Breed list with per-breed editor: name, specialty flag, ordering, description, trait tiles, varieties with optional per-chick price (free text). Renaming a variety propagates to photos tagged with it.
+As the owner, I want to edit and reorder breeds so that the gallery always reflects the flock.
+*Covered by:* Breed list with per-breed editor: name, specialty flag, ordering, description, trait tiles, varieties with optional per-chick price (free text). Renaming a variety propagates to photos tagged with it. (Creating/deleting whole breeds is supported by the API but not exposed in the UI.)
 
 **A3 — Manage availability by dragging.**
 As the owner, I want to move varieties between Available / Waitlist / Unavailable so that the public schedule stays current.
