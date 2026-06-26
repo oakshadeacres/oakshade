@@ -579,6 +579,12 @@ a.badge.rose:hover {
   .about-grid {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: var(--space-8);
+    align-items: start;
+  }
+  /* Head follows the reader on scroll, like the disclaimer masthead rail. */
+  .about-side {
+    position: sticky;
+    top: var(--space-7);
   }
 }
 .about-side {
@@ -981,7 +987,6 @@ a.badge.rose:hover {
   color: var(--color-ink-3);
   margin-top: var(--space-5);
   line-height: 1.7;
-  max-width: 60ch;
 }
 
 @media (max-width: 768px) {
@@ -1003,11 +1008,12 @@ a.badge.rose:hover {
 }
 
 /* ============================================
- * Disclaimer callout
+ * Disclaimer — posted policy notice (document voice)
  * ============================================ */
 
 .disclaimer {
-  padding: var(--space-7) 0;
+  padding: var(--space-9) 0;
+  border-top: 1px solid var(--color-rule);
   border-bottom: 1px solid var(--color-rule);
 }
 .disclaimer-inner {
@@ -1015,27 +1021,131 @@ a.badge.rose:hover {
   margin: 0 auto;
   padding: 0 var(--space-5);
 }
-.disclaimer-card {
-  border: 1px solid var(--color-accent-soft);
-  border-left: 3px solid var(--color-accent);
-  background: var(--color-accent-faint);
-  border-radius: var(--radius-sm);
-  padding: var(--space-5) var(--space-6);
+
+/* Head — adopt the site-wide eyebrow + serif-title rhythm */
+.disclaimer-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
 }
-.disclaimer-heading {
+.disclaimer-eyebrow {
+  margin: 0;
+}
+.disclaimer-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.04;
+  max-width: 18ch;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.disclaimer-lede {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: var(--text-xl);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  max-width: 34ch;
+}
+
+/* Document body */
+.disclaimer-doc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.disclaimer-para {
+  max-width: var(--measure);
+  color: var(--color-ink-2);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  margin: 0;
+}
+.disclaimer-para.is-terms {
+  margin-top: var(--space-2);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-rule);
+  font-size: var(--text-sm);
+  color: var(--color-ink-3);
+}
+
+/* Logistics — a real list with hanging terracotta rule markers */
+.disclaimer-list {
+  list-style: none;
+  margin: var(--space-1) 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4) var(--space-7);
+}
+.disclaimer-list li {
+  position: relative;
+  padding-left: var(--space-6);
+  color: var(--color-ink-2);
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+.disclaimer-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 16px;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+/* The critical clause — flagged, set apart, but not alarming */
+.disclaimer-notice {
+  max-width: var(--measure);
+  background: var(--color-accent-faint);
+  border-top: 2px solid var(--color-warn);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  padding: var(--space-5);
+}
+.disclaimer-notice-label {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--color-accent-deep);
-  margin-bottom: var(--space-3);
+  color: var(--color-warn);
+  margin: 0 0 var(--space-3);
 }
-.disclaimer-body {
+.disclaimer-notice-text {
   color: var(--color-ink-2);
-  font-size: var(--text-base);
-  line-height: 1.65;
-  white-space: pre-line;
-  max-width: 70ch;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Wide screens — masthead rail on the left, document on the right, so the
+ * section fills the container like every other section instead of hugging a
+ * narrow left column. */
+@media (min-width: 720px) {
+  .disclaimer-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .disclaimer-notice {
+    padding: var(--space-6) var(--space-7);
+  }
+}
+@media (min-width: 920px) {
+  .disclaimer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    column-gap: var(--space-8);
+    align-items: start;
+  }
+  .disclaimer-head {
+    margin-bottom: 0;
+    position: sticky;
+    top: var(--space-7);
+  }
+  .disclaimer-doc {
+    min-width: 0;
+  }
 }
 
 /* ============================================
@@ -1150,6 +1260,11 @@ a.badge.rose:hover {
   .contact-grid {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: var(--space-8);
+  }
+  /* Head follows the reader on scroll, like the disclaimer masthead rail. */
+  .contact-side {
+    position: sticky;
+    top: var(--space-7);
   }
 }
 .contact-side {

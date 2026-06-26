@@ -5,13 +5,94 @@ interface Props {
   body: string;
 }
 const { enabled, heading, body } = Astro.props;
+
+// Split the heading at the em-dash into a mono eyebrow (subject) + a serif
+// title (type), matching the site's .eyebrow / .sec-head rhythm. If there is
+// no em-dash, render the whole string as the title with no eyebrow.
+const headingParts = heading.split('—');
+const eyebrow = headingParts.length > 1 ? headingParts[0].trim() : '';
+const title =
+  headingParts.length > 1 ? headingParts.slice(1).join('—').trim() : heading.trim();
+
+// Parse the verbatim body string into presentational blocks. The copy is never
+// altered — blank lines delimit blocks, `•` lines become a real list, and a
+// "PLEASE NOTE …" block is flagged as a notice. This keeps site.json and the
+// admin textarea format untouched.
+type Block =
+  | { kind: 'list'; items: string[] }
+  | { kind: 'notice'; label: string; text: string }
+  | { kind: 'para'; text: string };
+
+const rawBlocks = body
+  .split(/\n{2,}/)
+  .map((b) => b.trim())
+  .filter(Boolean);
+
+const blocks: Block[] = rawBlocks.map((block) => {
+  const lines = block
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  const allBullets = lines.length > 0 && lines.every((l) => l.startsWith('•'));
+  if (allBullets) {
+    return { kind: 'list', items: lines.map((l) => l.replace(/^•\s*/, '')) };
+  }
+
+  if (/^please note/i.test(block)) {
+    const match = block.match(/^([^—]*?)—\s*([\s\S]*)$/);
+    if (match) return { kind: 'notice', label: match[1].trim(), text: match[2].trim() };
+    return { kind: 'notice', label: 'Please note', text: block };
+  }
+
+  return { kind: 'para', text: block };
+});
+
+// The first paragraph becomes the lede in the masthead rail; the remaining
+// blocks form the document body. The final paragraph reads as the terms close.
+const firstParaIndex = blocks.findIndex((b) => b.kind === 'para');
+const lede =
+  firstParaIndex >= 0 ? (blocks[firstParaIndex] as { text: string }).text : '';
+const bodyBlocks = blocks.filter((_, i) => i !== firstParaIndex);
+const termsIndex = bodyBlocks.reduce(
+  (last, b, i) => (b.kind === 'para' ? i : last),
+  -1
+);
 ---
 {enabled && (
-  <section class="disclaimer reveal">
+  <section class="disclaimer reveal" aria-label={title}>
     <div class="disclaimer-inner">
-      <div class="disclaimer-card">
-        {heading && <h3 class="disclaimer-heading">{heading}</h3>}
-        <p class="disclaimer-body">{body}</p>
+      <header class="disclaimer-head">
+        {eyebrow && <p class="eyebrow disclaimer-eyebrow">{eyebrow}</p>}
+        <h2 class="disclaimer-title">{title}</h2>
+        {lede && <p class="disclaimer-lede">{lede}</p>}
+      </header>
+
+      <div class="disclaimer-doc">
+        {bodyBlocks.map((block, i) => {
+          if (block.kind === 'list') {
+            return (
+              <ul class="disclaimer-list">
+                {block.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            );
+          }
+          if (block.kind === 'notice') {
+            return (
+              <aside class="disclaimer-notice" role="note">
+                <p class="disclaimer-notice-label">{block.label}</p>
+                <p class="disclaimer-notice-text">{block.text}</p>
+              </aside>
+            );
+          }
+          return (
+            <p class={`disclaimer-para ${i === termsIndex ? 'is-terms' : ''}`.trim()}>
+              {block.text}
+            </p>
+          );
+        })}
       </div>
     </div>
   </section>
