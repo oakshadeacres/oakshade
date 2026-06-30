@@ -1005,6 +1005,9 @@ a.badge.rose:hover {
     margin-bottom: var(--space-2);
   }
   .schedule-status-tag { display: block; }
+  /* On the stacked mobile layout, drop status groups a breed has nothing in
+     (desktop keeps them as "—" to preserve column alignment). */
+  .schedule-cell-empty { display: none; }
 }
 
 /* ============================================

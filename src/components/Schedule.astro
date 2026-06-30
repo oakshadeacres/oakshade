@@ -37,7 +37,7 @@ const columns = [
         <div class="schedule-row">
           <div class="schedule-cell schedule-cell-breed">{b.name}</div>
           {columns.map((c) => (
-            <div class="schedule-cell schedule-cell-status">
+            <div class={`schedule-cell schedule-cell-status${b[c.key].length === 0 ? ' schedule-cell-empty' : ''}`}>
               <div class={`schedule-status-tag ${c.cls}`}>{c.label}</div>
               {b[c.key].length === 0 ? (
                 <span class="schedule-empty">—</span>
