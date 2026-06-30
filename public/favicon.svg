@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="32" fill="#f7f3eb"/>
-  <rect x="30" y="9" width="4" height="7" rx="2" fill="#5e221a"/>
-  <path d="M20 28 L44 28 L44 34 Q44 53 32 56 Q20 53 20 34 Z" fill="#b66028"/>
-  <path d="M15 29 Q32 11 49 29 Q41 33 32 33 Q23 33 15 29 Z" fill="#5e221a"/>
+  <defs>
+    <clipPath id="egg"><path d="M32 5 C45 5 53 26 53 39 C53 51 44 59 32 59 C20 59 11 51 11 39 C11 26 19 5 32 5 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#egg)">
+    <path d="M32 5 C45 5 53 26 53 39 C53 51 44 59 32 59 C20 59 11 51 11 39 C11 26 19 5 32 5 Z" fill="#f8cda3"/>
+    <!-- shadow: big ellipse offset right, clipped to the egg => crescent on the right -->
+    <ellipse cx="70" cy="34" rx="32" ry="42" fill="#e0a877"/>
+  </g>
 </svg>
