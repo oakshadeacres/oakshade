@@ -21,7 +21,15 @@ varieties:
   - name: Calico
     price: $15
 images:
-  - url: /images/breeds/bantam-cochins/1776966957409-cochin.webp
+  - url: /images/breeds/bantam-cochins/1782844276885-img-8299.webp
+    variety: Calico
+  - url: /images/breeds/bantam-cochins/1782844320588-img-7520.webp
+    variety: Calico
+  - url: /images/breeds/bantam-cochins/1782844337969-img-7518.webp
+    variety: Calico
+  - url: /images/breeds/bantam-cochins/1782844389056-img-8155.webp
+    variety: Calico
+  - url: /images/breeds/bantam-cochins/1782844408682-img-8305.webp
     variety: Calico
 available:
   - Calico
