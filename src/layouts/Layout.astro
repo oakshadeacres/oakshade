@@ -13,11 +13,11 @@ const {
   title = 'Oakshade Acres – English Orpingtons & Specialty Chicks | Dayton, TX',
   description = 'Quality day-old chicks and hatching eggs in Dayton, Texas. Specializing in English Orpingtons (Lavender, Chocolate, Jubilee, Gold/Silver Laced), Polish, and Bantam Cochins & Easter Eggers. Small-farm quality, hand-raised with care.',
   path = '/',
-  ogImage = '/images/site/logo.png',
+  ogImage = '/images/site/og.png',
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const siteOrigin = Astro.site?.origin ?? 'https://oakshadeacres.github.io';
+const siteOrigin = Astro.site?.origin ?? 'https://oakshadeorpingtons.com';
 const pathWithSlash = path === '/' ? '/' : (path.startsWith('/') ? path : `/${path}`);
 const canonical = `${siteOrigin}${base}${pathWithSlash}`;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteOrigin}${base}${ogImage}`;
@@ -68,6 +68,9 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Oakshade Acres — Specialty Poultry, English Orpingtons" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
