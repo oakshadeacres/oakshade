@@ -35,7 +35,7 @@ redisClient.connect().then(() => {
 app.use(express.json({ limit: '1mb' }));
 
 // Public contact endpoint (registered BEFORE basic-auth middleware so it stays open).
-const PUBLIC_ORIGIN = 'https://oakshadeacres.github.io';
+const PUBLIC_ORIGIN = process.env.PUBLIC_ORIGIN || 'https://oakshadeorpingtons.com';
 const DEV_ORIGINS = ['http://localhost:4321', 'http://localhost:4322'];
 const contactRateLimit = new Map();
 
