@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || '0.0.0.0';
 
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASS = process.env.ADMIN_PASS || 'oakshade123';
+const ADMIN_PASS = process.env.ADMIN_PASS;
+if (!ADMIN_PASS) {
+  console.error('FATAL: ADMIN_PASS is required. Set a strong password in admin/.env.');
+  process.exit(1);
+}
 
 const PROJECT_ROOT = path.join(__dirname, '..');
 const CONTENT_DIR = path.join(PROJECT_ROOT, 'src', 'content');
@@ -143,7 +147,11 @@ app.post('/api/contact', async (req, res) => {
 });
 
 app.use((req, res, next) => {
-  if (HOST === '127.0.0.1' && !process.env.REQUIRE_AUTH) return next();
+  // Auth is always required unless explicitly disabled for local dev.
+  // Do NOT infer "local" from bind address or remote IP: a reverse proxy or
+  // tunnel (e.g. cloudflared) makes all traffic appear to originate from
+  // localhost, which would silently expose the admin to the internet.
+  if (process.env.DISABLE_AUTH === '1') return next();
   const auth = req.headers.authorization;
   const expected = 'Basic ' + Buffer.from(`${ADMIN_USER}:${ADMIN_PASS}`).toString('base64');
   if (!auth || auth !== expected) {
@@ -217,7 +225,12 @@ function isValidImageTarget(target) {
   return true;
 }
 
+function isValidBreedId(id) {
+  return typeof id === 'string' && /^[a-z0-9-]+$/.test(id);
+}
+
 function readBreed(id) {
+  if (!isValidBreedId(id)) return null;
   const filepath = path.join(BREEDS_DIR, `${id}.md`);
   if (!fs.existsSync(filepath)) return null;
   const content = fs.readFileSync(filepath, 'utf-8');
@@ -312,6 +325,7 @@ app.put('/api/breeds/:id', (req, res) => {
 });
 
 app.delete('/api/breeds/:id', (req, res) => {
+  if (!isValidBreedId(req.params.id)) return res.status(400).json({ error: 'Invalid breed id' });
   const filepath = path.join(BREEDS_DIR, `${req.params.id}.md`);
   if (!fs.existsSync(filepath)) return res.status(404).json({ error: 'Not found' });
   fs.unlinkSync(filepath);
@@ -499,7 +513,7 @@ app.listen(PORT, HOST, () => {
     Local:   http://localhost:${PORT}
     Network: http://${HOST === '0.0.0.0' ? '<your-ip>' : HOST}:${PORT}
 
-  Auth: ${HOST === '127.0.0.1' && !process.env.REQUIRE_AUTH ? 'disabled (localhost)' : 'enabled'}
+  Auth: ${process.env.DISABLE_AUTH === '1' ? 'DISABLED (DISABLE_AUTH=1)' : 'enabled'}
   User: ${ADMIN_USER}
   `);
   watchForCodeChanges();
