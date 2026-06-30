@@ -18,13 +18,21 @@ interface Props {
 const { label, title, breeds } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const breedsData = breeds.map((b) => ({
-  ...b,
-  images: b.images.map((img) => ({
-    url: img.url.startsWith('http') ? img.url : `${base}${img.url}`,
-    variety: img.variety,
-  })),
-}));
+const breedsData = breeds.map((b) => {
+  // Order images to match the "Varieties We Carry" pills: group by variety in
+  // the order varieties are listed; unknown/no-variety images fall to the end.
+  // Array.sort is stable, so images within a variety keep their stored order.
+  const varietyOrder = new Map(b.varieties.map((v, i) => [v.name, i]));
+  const orderOf = (img) =>
+    img.variety && varietyOrder.has(img.variety) ? varietyOrder.get(img.variety) : Infinity;
+  const images = b.images
+    .map((img) => ({
+      url: img.url.startsWith('http') ? img.url : `${base}${img.url}`,
+      variety: img.variety,
+    }))
+    .sort((a, c) => orderOf(a) - orderOf(c));
+  return { ...b, images };
+});
 
 const firstBreed = breedsData[0];
 const firstImage = firstBreed?.images[0];
