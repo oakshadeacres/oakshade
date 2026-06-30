@@ -25,3 +25,15 @@ Thumbs.db
 # local-only
 Oakshade.zip
 admin/.env
+
+# editor/agent tooling
+.agents/
+.serena/
+.claude/skills/
+skills-lock.json
+
+# backups & scratch
+*.backup
+design_try.md
+docs/test
+sesh_*.txt
