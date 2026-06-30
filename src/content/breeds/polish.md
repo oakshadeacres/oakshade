@@ -25,7 +25,22 @@ varieties:
   - name: White Crested Chocolate
     price: $25
 images:
-  - url: /images/breeds/polish/01-polish-group.jpg
+  - url: /images/breeds/polish/1782844039123-img-0186.webp
+    variety: Tolbunt
+  - url: >-
+      /images/breeds/polish/1782843965311-666581155-122186562014867558-3006980277946136834-n.webp
+    variety: Tolbunt
+  - url: >-
+      /images/breeds/polish/1782843985106-666581155-122186562014867558-3006980277946136834-n.webp
+    variety: Tolbunt
+  - url: >-
+      /images/breeds/polish/1782844026243-bac87f59-fc9a-413c-9078-0298802e5703.webp
+    variety: Tolbunt
+  - url: /images/breeds/polish/1782844065783-img-0189.webp
+    variety: Tolbunt
+  - url: /images/breeds/polish/1782844091265-img-0206.webp
+    variety: Tolbunt
+  - url: /images/breeds/polish/1782844152304-img-8445.webp
     variety: Tolbunt
 available:
   - Tolbunt
